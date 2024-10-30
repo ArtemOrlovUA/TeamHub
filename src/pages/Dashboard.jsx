@@ -14,7 +14,7 @@ function Dashboard() {
     <>
       <div>Hello, {user.user_metadata.fullName}!</div>
       <div>Your email: {user.email}</div>
-      <div>Your skills: {skills.join(", ")}</div>
+      {skills && <div>Your skills: {skills?.join(", ")}</div>}
       <button onClick={() => logout()}>Вийти</button>
     </>
   );
