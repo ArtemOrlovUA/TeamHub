@@ -8,8 +8,8 @@ import Input from "../../ui/Input";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
-  const [email, setEmail] = useState("somename@example.com");
-  const [password, setPassword] = useState("pass12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { login, isLoadingAuth } = useLogin();
 
@@ -34,6 +34,7 @@ function LoginForm() {
           type="email"
           id="email"
           autoComplete="username"
+          placeholder="Уведіть електронну пошту"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={isLoadingAuth}
@@ -44,6 +45,7 @@ function LoginForm() {
           type="password"
           id="password"
           autoComplete="current-password"
+          placeholder="Уведіть пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={isLoadingAuth}
