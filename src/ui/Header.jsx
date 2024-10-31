@@ -1,6 +1,7 @@
-import styled from 'styled-components';
-import UserAvatar from '../features/authentication/UserAvatar';
-import HeaderMenu from './HeaderMenu';
+import styled from "styled-components";
+import UserAvatar from "../features/authentication/UserAvatar";
+import HeaderMenu from "./HeaderMenu";
+import { Link } from "react-router-dom";
 
 const StyledHeader = styled.header`
   background-color: var(--color-grey-0);
@@ -15,6 +16,7 @@ function Header() {
   return (
     <StyledHeader>
       <UserAvatar />
+      <Link to="/dashboard">Home</Link>
       <HeaderMenu />
     </StyledHeader>
   );

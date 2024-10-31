@@ -16,3 +16,18 @@ export async function getUserSkills(uid) {
 
   return data;
 }
+
+export async function getUserById(userId) {
+  try {
+    const { data, error } = await supabase.auth.admin.getUserById(userId);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+}

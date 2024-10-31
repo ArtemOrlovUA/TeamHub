@@ -1,5 +1,6 @@
-import { Link, Outlet } from "react-router-dom";
-import styled from "styled-components";
+import { Outlet } from "react-router-dom";
+import Header from "./Header";
+// import styled from "styled-components";
 
 // const StyledAppLayout = styled.div`
 //   display: grid;
@@ -27,6 +28,7 @@ import styled from "styled-components";
 function AppLayout() {
   return (
     <>
+      <Header />
       <Outlet />
     </>
   );

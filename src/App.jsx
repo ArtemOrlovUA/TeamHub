@@ -9,6 +9,8 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import AppLayout from "./ui/AppLayout";
 import UserSkillsForm from "./pages/UserSkillsForm";
+import CreateTeamForm from "./pages/CreateTeamForm";
+import TeamPage from "./pages/TeamPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +35,8 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="skills" element={<UserSkillsForm />} />
+            <Route path="createTeam" element={<CreateTeamForm />} />
+            <Route path="team/:teamId" element={<TeamPage />} />
           </Route>
           <Route path="home" element={<Home />} />
           <Route path="registration" element={<Registration />} />
