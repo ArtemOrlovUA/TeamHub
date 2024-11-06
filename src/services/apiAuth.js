@@ -1,6 +1,12 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function signup({ fullName, email, password }) {
+export async function signup({ fullName, email, password, linkedin }) {
+  console.log({ fullName, email, password, linkedin });
+
+  const { dataUserInfo, errorUserInfo } = await supabase
+    .from("userInfo")
+    .insert([{ email: email, fullName: fullName, linkedIn: linkedin }]);
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -14,7 +20,12 @@ export async function signup({ fullName, email, password }) {
     throw new Error("Signup failed");
   }
 
-  return data;
+  if (errorUserInfo) {
+    console.error(errorUserInfo.message);
+    throw new Error("Signup failed");
+  }
+
+  return { data, dataUserInfo };
 }
 
 export async function login({ email, password }) {

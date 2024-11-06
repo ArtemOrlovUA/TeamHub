@@ -1,14 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTeam as createTeamApi } from "../../services/apiTeam";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export function useCreateTeam() {
   const queryClient = useQueryClient();
+  const Navigate = useNavigate();
 
   const { mutate: createTeam, isLoading: isCreating } = useMutation({
-    mutationFn: ({ creatorId, roles, teamName, teamGoals, deadline_date }) => {
+    mutationFn: ({
+      creatorEmail,
+      roles,
+      teamName,
+      teamGoals,
+      deadline_date,
+    }) => {
       return createTeamApi(
-        creatorId,
+        creatorEmail,
         roles,
         teamName,
         teamGoals,
@@ -17,6 +25,7 @@ export function useCreateTeam() {
     },
     onSuccess: () => {
       toast.success("Команду успішно створено");
+      Navigate("/dashboard");
       queryClient.invalidateQueries({
         queryKey: ["teams"],
       });

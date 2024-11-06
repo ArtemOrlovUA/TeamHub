@@ -7,8 +7,8 @@ export function useSignup() {
   const navigate = useNavigate();
 
   const { mutate: signup, isLoading: isSigningUp } = useMutation({
-    mutationFn: ({ fullName, email, password }) =>
-      signupApi({ fullName, email, password }),
+    mutationFn: ({ fullName, email, password, linkedin }) =>
+      signupApi({ fullName, email, password, linkedin }),
     onSuccess: () => {
       navigate("/skills", { replace: true });
       toast.success("Реєстрація пройшла успішно!");

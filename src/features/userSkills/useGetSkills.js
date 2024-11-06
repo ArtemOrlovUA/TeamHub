@@ -4,7 +4,6 @@ import { useUser } from "../authentication/useUser";
 
 export function useGetSkills() {
   const user = useUser();
-  console.log(user.user.id);
 
   const {
     isLoading,
@@ -15,7 +14,6 @@ export function useGetSkills() {
     queryFn: () => getUserSkills(user.user.id),
   });
 
-  // Split the skills string if `skillsData` is present
   const skills = skillsData ? skillsData[0]?.skills.split(",") : [];
 
   return { isLoading, skills, error };

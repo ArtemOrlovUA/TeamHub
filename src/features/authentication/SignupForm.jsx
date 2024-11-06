@@ -10,9 +10,11 @@ function SignupForm() {
   const { errors } = formState;
   const { signup, isSigningUp } = useSignup();
 
-  function onSubmit({ fullName, email, password }) {
+  function onSubmit({ fullName, email, password, linkedin }) {
+    console.log({ fullName, email, password, linkedin });
+
     signup(
-      { fullName, email, password },
+      { fullName, email, password, linkedin },
       {
         onSettled: () => {
           reset();
@@ -43,6 +45,24 @@ function SignupForm() {
             pattern: {
               value: /\S+@\S+\.\S+/,
               message: "Буль ласка, введіть коректну електронну пошту",
+            },
+          })}
+          disabled={isSigningUp}
+        />
+      </FormRow>
+
+      <FormRow
+        label="Посилання на ваш LinkedIn"
+        error={errors?.linkedin?.message}
+      >
+        <Input
+          type="text"
+          id="linkedin"
+          {...register("linkedin", {
+            required: "Це поле повинно бути заповнене",
+            pattern: {
+              value: /^www\.linkedin\.com\/.*/,
+              message: "Посилання повинно починатися з www.linkedin.com",
             },
           })}
           disabled={isSigningUp}

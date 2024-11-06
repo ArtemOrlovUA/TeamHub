@@ -1,16 +1,16 @@
 /* eslint-disable react/prop-types */
-import { cloneElement, createContext, useContext, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { HiXMark } from 'react-icons/hi2';
-import styled from 'styled-components';
-import { useOutsideClick } from '../hooks/useOutsideClick';
+import { cloneElement, createContext, useContext, useState } from "react";
+import { createPortal } from "react-dom";
+import { HiXMark } from "react-icons/hi2";
+import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--color-grey-0);
+  background-color: yellow;
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
@@ -57,16 +57,18 @@ const Button = styled.button`
 const ModalContext = createContext();
 
 function Modal({ children }) {
-  const [openName, setOpenName] = useState('');
+  const [openName, setOpenName] = useState("");
 
   function close() {
-    setOpenName('');
+    setOpenName("");
   }
 
   const open = (opens) => setOpenName(opens);
 
   return (
-    <ModalContext.Provider value={{ openName, close, open }}>{children}</ModalContext.Provider>
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
   );
 
   // return createPortal(
@@ -82,10 +84,11 @@ function Modal({ children }) {
   // );
 }
 
-function Open({ children, opens }) {
+function Open({ children, opens, onClickFunction }) {
   const { open } = useContext(ModalContext);
   return cloneElement(children, {
     onClick: () => {
+      if (onClickFunction) onClickFunction();
       open(opens);
     },
   });
@@ -97,8 +100,8 @@ function Window({ children, name }) {
 
   if (openName === name)
     return createPortal(
-      <Overlay>
-        <StyledModal ref={ref}>
+      <Overlay className="bg-yellow-200">
+        <StyledModal className="bg-yellow-200" ref={ref}>
           <Button onClick={() => close(name)}>
             <HiXMark />
           </Button>
