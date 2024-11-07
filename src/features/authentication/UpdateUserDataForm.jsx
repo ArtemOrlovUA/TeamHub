@@ -1,34 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import Button from "../../ui/Button";
+import FileInput from "../../ui/FileInput";
+import Form from "../../ui/Form";
+import FormRow from "../../ui/FormRow";
+import Input from "../../ui/Input";
 
-import Button from '../../ui/Button';
-import FileInput from '../../ui/FileInput';
-import Form from '../../ui/Form';
-import FormRow from '../../ui/FormRow';
-import Input from '../../ui/Input';
-
-import { useUser } from './useUser';
-import { useUpdate } from './useUpdate';
+import { useUser } from "./useUser";
+import { useUpdate } from "./useUpdate";
 
 function UpdateUserDataForm() {
-  // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
-  const {
-    user: {
-      email,
-      user_metadata: { fullName: currentFullName },
-    },
-  } = useUser();
-
-  const [fullName, setFullName] = useState(currentFullName);
-  const [avatar, setAvatar] = useState(null);
-
+  const { user, isLoading } = useUser();
   const { updateUser, isUpdating } = useUpdate();
+  const [fullName, setFullName] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [linkedin, setLinkedin] = useState("");
+
+  useEffect(() => {
+    if (user?.user_metadata) {
+      setFullName(user.user_metadata.fullName || "");
+      setLinkedin(user.user_metadata.linkedin || "");
+    }
+  }, [user]);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (!fullName) return;
 
     updateUser(
-      { fullName, avatar },
+      { fullName, avatar, linkedin },
       {
         onSettled: () => {
           setAvatar(null);
@@ -38,10 +37,13 @@ function UpdateUserDataForm() {
     );
   }
 
+  if (isLoading) return <p>Loading user data...</p>;
+  if (!user) return <p>No user data available.</p>;
+
   return (
     <Form onSubmit={handleSubmit}>
       <FormRow label="Email address">
-        <Input value={email} disabled />
+        <Input value={user.email || ""} disabled />
       </FormRow>
       <FormRow label="Full name">
         <Input
@@ -52,12 +54,29 @@ function UpdateUserDataForm() {
           disabled={isUpdating}
         />
       </FormRow>
+      <FormRow label="LinkedIn URL">
+        <Input
+          type="text"
+          value={linkedin}
+          onChange={(e) => setLinkedin(e.target.value)}
+          id="linkedin"
+          disabled={isUpdating}
+        />
+      </FormRow>
       <FormRow label="Avatar image">
         <FileInput
           id="avatar"
           accept="image/*"
           disabled={isUpdating}
           onChange={(e) => setAvatar(e.target.files[0])}
+        />
+      </FormRow>
+      <FormRow label="Upload CV">
+        <FileInput
+          id="cv"
+          accept=".pdf,.doc,.docx"
+          disabled={isUpdating}
+          // onChange={(e) => setCv(e.target.files[0])}
         />
       </FormRow>
       <FormRow>

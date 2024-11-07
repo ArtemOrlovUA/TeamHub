@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { useUser } from './useUser';
+import styled from "styled-components";
+import { useUser } from "./useUser";
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -23,14 +23,19 @@ const Avatar = styled.img`
 
 function UserAvatar() {
   const { user } = useUser();
-  const { fullName, avatar } = user.user_metadata;
-
-  console.log(user);
+  const fullName = user?.user_metadata?.fullName || "Guest";
+  const avatar = user?.user_metadata?.avatar || "default-user.jpg";
+  const linkedin = user?.user_metadata?.linkedin;
 
   return (
     <StyledUserAvatar>
-      <Avatar src={avatar || 'default-user.jpg'} alt={`Avatar of ${fullName}`}></Avatar>
+      <Avatar src={avatar} alt={`Avatar of ${fullName}`} />
       <span>{fullName}</span>
+      {linkedin && (
+        <a href={linkedin} target="_blank" rel="noopener noreferrer">
+          LinkedIn
+        </a>
+      )}
     </StyledUserAvatar>
   );
 }

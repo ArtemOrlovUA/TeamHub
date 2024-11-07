@@ -1,11 +1,17 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function signup({ fullName, email, password }) {
+export async function signup({ fullName, email, password, linkedin }) {
+  console.log({ fullName, email, password, linkedin });
+
+  const { dataUserInfo, errorUserInfo } = await supabase
+    .from("userInfo")
+    .insert([{ email: email, fullName: fullName, linkedIn: linkedin }]);
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { fullName, avatar: "" },
+      data: { fullName, avatar: "", linkedin },
     },
   });
 
@@ -14,7 +20,12 @@ export async function signup({ fullName, email, password }) {
     throw new Error("Signup failed");
   }
 
-  return data;
+  if (errorUserInfo) {
+    console.error(errorUserInfo.message);
+    throw new Error("Signup failed");
+  }
+
+  return { data, dataUserInfo };
 }
 
 export async function login({ email, password }) {
@@ -51,32 +62,47 @@ export async function logout() {
   if (error) throw new Error(error.message);
 }
 
-export async function updateCurrentUser({ password, fullName, avatar }) {
-  let updateData;
+export async function updateCurrentUser({
+  password,
+  fullName,
+  avatar,
+  linkedin,
+  cv,
+}) {
+  let updateData = { data: {} };
 
-  if (password) updateData = { password };
-  if (fullName) updateData = { data: { fullName } };
+  if (password) updateData.password = password;
+  if (fullName) updateData.data.fullName = fullName;
+  if (linkedin) updateData.data.linkedin = linkedin;
 
   const { data, error } = await supabase.auth.updateUser(updateData);
 
   if (error) throw new Error(error.message);
 
-  if (!avatar) return data;
+  if (avatar) {
+    const fileName = `avatar-${data.user.id}-${Math.random()}`;
+    const { error: errorUploadAvatar } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, avatar);
+    if (errorUploadAvatar) throw new Error(errorUploadAvatar.message);
 
-  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+    updateData.data.avatar = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+  }
 
-  const { error: errorUpload } = await supabase.storage
-    .from("avatars")
-    .upload(fileName, avatar);
-  if (errorUpload) throw new Error(errorUpload.message);
+  if (cv) {
+    const cvFileName = `cv-${data.user.id}-${Math.random()}`;
+    const { error: errorUploadCv } = await supabase.storage
+      .from("cvs")
+      .upload(cvFileName, cv);
+    if (errorUploadCv) throw new Error(errorUploadCv.message);
 
-  const { data: updatedUser, error: errorUpdateImage } =
-    supabase.auth.updateUser({
-      data: {
-        avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-      },
-    });
-  if (errorUpdateImage) throw new Error(errorUpdateImage.message);
+    // Update CV URL in the user metadata
+    updateData.data.cv = `${supabaseUrl}/storage/v1/object/public/cvs/${cvFileName}`;
+  }
+
+  const { data: updatedUser, error: errorUpdateMetadata } =
+    await supabase.auth.updateUser(updateData);
+  if (errorUpdateMetadata) throw new Error(errorUpdateMetadata.message);
 
   return updatedUser;
 }

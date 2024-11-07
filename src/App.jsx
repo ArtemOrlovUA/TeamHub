@@ -11,6 +11,8 @@ import AppLayout from "./ui/AppLayout";
 import UserSkillsForm from "./pages/UserSkillsForm";
 import CreateTeamForm from "./pages/CreateTeamForm";
 import TeamPage from "./pages/TeamPage";
+import InvitesPage from "./pages/InvitesPage";
+import UpdateUserInfo from "./pages/UpdateUserInfo";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,13 +37,14 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="skills" element={<UserSkillsForm />} />
+            <Route path="invites" element={<InvitesPage />} />
             <Route path="createTeam" element={<CreateTeamForm />} />
             <Route path="team/:teamId" element={<TeamPage />} />
           </Route>
           <Route path="home" element={<Home />} />
           <Route path="registration" element={<Registration />} />
           <Route path="login" element={<Login />} />
-          <Route path="*" element={<div>Not found</div>} />
+          <Route path="account" element={<UpdateUserInfo />} />
         </Routes>
       </BrowserRouter>
 
