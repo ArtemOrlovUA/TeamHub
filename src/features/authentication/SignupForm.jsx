@@ -61,8 +61,8 @@ function SignupForm() {
           {...register("linkedin", {
             required: "Це поле повинно бути заповнене",
             pattern: {
-              value: /^www\.linkedin\.com\/.*/,
-              message: "Посилання повинно починатися з www.linkedin.com",
+              value: /^(https?:\/\/)?(www\.)?linkedin\.com\/.*$/,
+              message: "Посилання повинно починатися з https://www.linkedin.com або www.linkedin.com",
             },
           })}
           disabled={isSigningUp}
