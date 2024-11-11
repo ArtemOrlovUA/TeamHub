@@ -6,7 +6,7 @@ import { useTeam } from "../features/teams/useTeam";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import RoleLeave from "../features/teams/roleLeave";
+import RoleLeave from "../features/teams/RoleLeave";
 import TeamDelete from "../features/teams/TeamDelete";
 import RoleRequestSelect from "../features/teams/RoleRequestSelect";
 
