@@ -22,7 +22,7 @@ const roleToEmailField = {
   Ментор: "email_mentor",
 };
 
-function RoleRequestSelect({ user_email, team_id, team_name, onCloseModal }) {
+function RoleRequestSelect({ user_email, team_id, team_name }) {
   const { request } = useRequest();
   const { handleSubmit } = useForm();
   const { team } = useGetTeamById(team_id);
@@ -45,7 +45,7 @@ function RoleRequestSelect({ user_email, team_id, team_name, onCloseModal }) {
     }
 
     console.log(user_email, team_id, selectedRole);
-    request({ user_email, team_id, role: selectedRole, onCloseModal });
+    request({ user_email, team_id, role: selectedRole });
   };
 
   if (availableRoles.length === 0) {

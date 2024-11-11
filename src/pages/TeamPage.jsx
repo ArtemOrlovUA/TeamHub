@@ -193,7 +193,7 @@ function TeamPage() {
           user_email={user?.email}
           team_id={teamId}
           team_name={team?.teamName}
-          onCloseModal={() => close("joinRequest")}
+          // Додати функцію на закриття
         />
       </Modal.Window>
     </Modal>
