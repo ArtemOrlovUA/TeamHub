@@ -3,12 +3,16 @@ import { useUser } from "../features/authentication/useUser";
 import { useGetSkills } from "../features/userSkills/useGetSkills";
 import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
 import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
+import { useGetAllUserTeams } from "../features/teams/useGetAllUserTeams";
 
 function Dashboard() {
   const { user } = useUser();
   const { skills } = useGetSkills();
   const { teams } = useGetTeamsByCreator(user.email);
+  const { userTeams } = useGetAllUserTeams(user.email);
   const { personInvites } = useGetInvitesByEmail(user.email);
+
+  console.log("userTeams", userTeams);
 
   return (
     <>
@@ -23,9 +27,27 @@ function Dashboard() {
       <p>Чи</p>
       <button>Приєднатися до команди</button>
 
-      {teams?.length > 0 && (
+      {userTeams?.filter(
+        (userTeam) => !teams?.some((team) => team.id === userTeam.id),
+      )?.length > 0 && (
         <div>
           <h2>Ваші команди:</h2>
+          <div>
+            {userTeams
+              ?.filter(
+                (userTeam) => !teams?.some((team) => team.id === userTeam.id),
+              )
+              .map((team) => (
+                <div key={team.id}>
+                  <Link to={`/team/${team.id}`}>{team.teamName}</Link>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+      {teams?.length > 0 && (
+        <div>
+          <h2>Команди, чиїм власником є Ви:</h2>
           <div>
             {teams?.map((team) => (
               <div key={team.id}>

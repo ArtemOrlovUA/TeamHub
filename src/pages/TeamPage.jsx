@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 import { useDeleteTeam } from "../features/teams/useDeleteTeam";
+import RoleLeave from "../features/teams/roleLeave";
 
 function TeamPage() {
   const { team } = useTeam();
@@ -22,9 +23,16 @@ function TeamPage() {
   const { teamId } = useParams();
 
   const [roleToInvite, setRoleToInvite] = useState("");
+  const [roleToLeave, setRoleToLeave] = useState("");
+
+  const isTeamOwner = teamOwner && teamOwner[0]?.email === user.email;
 
   function handleInvite(role) {
     setRoleToInvite(role);
+  }
+
+  function handleLeave(role) {
+    setRoleToLeave(role);
   }
 
   return (
@@ -36,57 +44,111 @@ function TeamPage() {
         </span>
         <span>
           <p>Front: {(front && front[0]?.fullName) || "відсутній"}</p>
-          <Modal.Open
-            opens={"invite"}
-            onClickFunction={() => handleInvite("Front-end")}
-          >
-            <button>Запросити на роль</button>
-          </Modal.Open>
+          {isTeamOwner ? (
+            <Modal.Open
+              opens={"invite"}
+              onClickFunction={() => handleInvite("Front-end")}
+            >
+              <button>Запросити на роль</button>
+            </Modal.Open>
+          ) : user.email === team?.email_front ? (
+            <Modal.Open
+              opens={"leave"}
+              onClickFunction={() => handleLeave("Front-end")}
+            >
+              <button>Покинути роль</button>
+            </Modal.Open>
+          ) : null}
         </span>
         <span>
           <p>Back: {(back && back[0]?.fullName) || "відсутній"}</p>
-          <Modal.Open
-            opens={"invite"}
-            onClickFunction={() => handleInvite("Back-end")}
-          >
-            <button>Запросити на роль</button>
-          </Modal.Open>
+          {isTeamOwner ? (
+            <Modal.Open
+              opens={"invite"}
+              onClickFunction={() => handleInvite("Back-end")}
+            >
+              <button>Запросити на роль</button>
+            </Modal.Open>
+          ) : user.email === team?.email_back ? (
+            <Modal.Open
+              opens={"leave"}
+              onClickFunction={() => handleLeave("Back-end")}
+            >
+              <button>Покинути роль</button>
+            </Modal.Open>
+          ) : null}
         </span>
         <span>
           <p>UI/UX: {(ui && ui[0]?.fullName) || "відсутній"}</p>
-          <Modal.Open
-            opens={"invite"}
-            onClickFunction={() => handleInvite("UI/UX")}
-          >
-            <button>Запросити на роль</button>
-          </Modal.Open>
+          {isTeamOwner ? (
+            <Modal.Open
+              opens={"invite"}
+              onClickFunction={() => handleInvite("UI/UX")}
+            >
+              <button>Запросити на роль</button>
+            </Modal.Open>
+          ) : user.email === team?.email_ui ? (
+            <Modal.Open
+              opens={"leave"}
+              onClickFunction={() => handleLeave("UI/UX")}
+            >
+              <button>Покинути роль</button>
+            </Modal.Open>
+          ) : null}
         </span>
         <span>
           <p>QA: {(qa && qa[0]?.fullName) || "відсутній"}</p>
-          <Modal.Open
-            opens={"invite"}
-            onClickFunction={() => handleInvite("QA")}
-          >
-            <button>Запросити на роль</button>
-          </Modal.Open>
+          {isTeamOwner ? (
+            <Modal.Open
+              opens={"invite"}
+              onClickFunction={() => handleInvite("QA")}
+            >
+              <button>Запросити на роль</button>
+            </Modal.Open>
+          ) : user.email === team?.email_qa ? (
+            <Modal.Open
+              opens={"leave"}
+              onClickFunction={() => handleLeave("QA")}
+            >
+              <button>Покинути роль</button>
+            </Modal.Open>
+          ) : null}
         </span>
         <span>
           <p>PM: {(pm && pm[0]?.fullName) || "відсутній"}</p>
-          <Modal.Open
-            opens={"invite"}
-            onClickFunction={() => handleInvite("PM")}
-          >
-            <button>Запросити на роль</button>
-          </Modal.Open>
+          {isTeamOwner ? (
+            <Modal.Open
+              opens={"invite"}
+              onClickFunction={() => handleInvite("PM")}
+            >
+              <button>Запросити на роль</button>
+            </Modal.Open>
+          ) : user.email === team?.email_pm ? (
+            <Modal.Open
+              opens={"leave"}
+              onClickFunction={() => handleLeave("PM")}
+            >
+              <button>Покинути роль</button>
+            </Modal.Open>
+          ) : null}
         </span>
         <span>
           <p>Mentor: {(mentor && mentor[0]?.fullName) || "відсутній"}</p>
-          <Modal.Open
-            opens={"invite"}
-            onClickFunction={() => handleInvite("Mentor")}
-          >
-            <button>Запросити на роль</button>
-          </Modal.Open>
+          {isTeamOwner ? (
+            <Modal.Open
+              opens={"invite"}
+              onClickFunction={() => handleInvite("Mentor")}
+            >
+              <button>Запросити на роль</button>
+            </Modal.Open>
+          ) : user.email === team?.email_mentor ? (
+            <Modal.Open
+              opens={"leave"}
+              onClickFunction={() => handleLeave("Mentor")}
+            >
+              <button>Покинути роль</button>
+            </Modal.Open>
+          ) : null}
         </span>
 
         <p>Цілі: {team?.teamGoals}</p>
@@ -97,6 +159,9 @@ function TeamPage() {
         ) : null}
       </div>
 
+      <Modal.Window name={"leave"}>
+        <RoleLeave role={roleToLeave} team_id={teamId} email={user?.email} />
+      </Modal.Window>
       <Modal.Window name={"invite"}>
         <RoleInvite role={roleToInvite} team_id={teamId} />
       </Modal.Window>
