@@ -6,13 +6,12 @@ import { useTeam } from "../features/teams/useTeam";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import { useDeleteTeam } from "../features/teams/useDeleteTeam";
 import RoleLeave from "../features/teams/roleLeave";
+import TeamDelete from "../features/teams/TeamDelete";
 
 function TeamPage() {
   const { team } = useTeam();
   const { user } = useUser();
-  const { deleteTeam } = useDeleteTeam();
   const { user: teamOwner } = useGetUserByEmail(team?.email_owner);
   const { user: front } = useGetUserByEmail(team?.email_front);
   const { user: back } = useGetUserByEmail(team?.email_back);
@@ -155,7 +154,9 @@ function TeamPage() {
         <p>Таймлайн: {team?.deadline_date}</p>
 
         {teamOwner && teamOwner[0]?.email === user.email ? (
-          <button onClick={() => deleteTeam(teamId)}>Видалити команду</button>
+          <Modal.Open opens={"deleteTeam"}>
+            <button>Видалити команду</button>
+          </Modal.Open>
         ) : null}
       </div>
 
@@ -164,6 +165,9 @@ function TeamPage() {
       </Modal.Window>
       <Modal.Window name={"invite"}>
         <RoleInvite role={roleToInvite} team_id={teamId} />
+      </Modal.Window>
+      <Modal.Window name={"deleteTeam"}>
+        <TeamDelete team_id={teamId} team_name={team?.teamName} />
       </Modal.Window>
     </Modal>
   );
