@@ -16,7 +16,8 @@ function Header() {
   return (
     <StyledHeader>
       <UserAvatar />
-      <Link to="/dashboard">Home</Link>
+      <Link to="/dashboard">Головна сторінка</Link>
+      <Link to="/teams">Команди</Link>
       <HeaderMenu />
     </StyledHeader>
   );

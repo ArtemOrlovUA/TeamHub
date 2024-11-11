@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 import RoleLeave from "../features/teams/roleLeave";
 import TeamDelete from "../features/teams/TeamDelete";
+import RoleRequestSelect from "../features/teams/RoleRequestSelect";
 
 function TeamPage() {
   const { team } = useTeam();
@@ -33,6 +34,18 @@ function TeamPage() {
   function handleLeave(role) {
     setRoleToLeave(role);
   }
+
+  const teamMemberEmails = [
+    team?.email_owner,
+    team?.email_front,
+    team?.email_back,
+    team?.email_ui,
+    team?.email_qa,
+    team?.email_pm,
+    team?.email_mentor,
+  ];
+
+  const isNotTeamMember = !teamMemberEmails.includes(user?.email);
 
   return (
     <Modal>
@@ -158,6 +171,12 @@ function TeamPage() {
             <button>Видалити команду</button>
           </Modal.Open>
         ) : null}
+
+        {isNotTeamMember && (
+          <Modal.Open opens="joinRequest">
+            <button>Подати запит на приєднання</button>
+          </Modal.Open>
+        )}
       </div>
 
       <Modal.Window name={"leave"}>
@@ -168,6 +187,14 @@ function TeamPage() {
       </Modal.Window>
       <Modal.Window name={"deleteTeam"}>
         <TeamDelete team_id={teamId} team_name={team?.teamName} />
+      </Modal.Window>
+      <Modal.Window name="joinRequest">
+        <RoleRequestSelect
+          user_email={user?.email}
+          team_id={teamId}
+          team_name={team?.teamName}
+          onCloseModal={() => close("joinRequest")}
+        />
       </Modal.Window>
     </Modal>
   );

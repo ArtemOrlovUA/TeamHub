@@ -12,8 +12,6 @@ function Dashboard() {
   const { userTeams } = useGetAllUserTeams(user.email);
   const { personInvites } = useGetInvitesByEmail(user.email);
 
-  console.log("userTeams", userTeams);
-
   return (
     <>
       <div>Ваша пошта: {user.email}</div>

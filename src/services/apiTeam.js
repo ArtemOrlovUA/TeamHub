@@ -57,6 +57,17 @@ export async function getTeam(id) {
   return data;
 }
 
+export async function getAllTeams() {
+  const { data, error } = await supabase.from("teams").select("*");
+
+  if (error) {
+    console.error("Error fetching all teams:", error.message);
+    throw new Error("Could not fetch teams");
+  }
+
+  return data;
+}
+
 export async function deleteTeam(team_id) {
   const { error } = await supabase.from("teams").delete().eq("id", team_id);
 
@@ -258,4 +269,18 @@ export async function declineInviteById(invite_id) {
     console.error("Error deleting invite:", deleteInviteError.message);
     throw new Error("Could not delete invite after accepting");
   }
+}
+
+export async function createRequest({ user_email, team_id, role }) {
+  const { data, error } = await supabase
+    .from("requests")
+    .insert({ user_email, team_id, role })
+    .select();
+
+  if (error) {
+    console.error("Error creating request:", error.message);
+    throw new Error("Could not create request");
+  }
+
+  return data;
 }

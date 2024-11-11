@@ -13,6 +13,7 @@ import CreateTeamForm from "./pages/CreateTeamForm";
 import TeamPage from "./pages/TeamPage";
 import InvitesPage from "./pages/InvitesPage";
 import UpdateUserInfo from "./pages/UpdateUserInfo";
+import Teams from "./pages/Teams";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,7 @@ function App() {
             <Route path="skills" element={<UserSkillsForm />} />
             <Route path="invites" element={<InvitesPage />} />
             <Route path="createTeam" element={<CreateTeamForm />} />
+            <Route path="teams" element={<Teams />} />
             <Route path="team/:teamId" element={<TeamPage />} />
           </Route>
           <Route path="home" element={<Home />} />
