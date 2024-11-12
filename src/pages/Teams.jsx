@@ -3,7 +3,6 @@ import { useGetAllTeams } from "../features/teams/useGetAllTeams";
 
 function Teams() {
   const { allTeams } = useGetAllTeams();
-  console.log(allTeams);
 
   return (
     <table>

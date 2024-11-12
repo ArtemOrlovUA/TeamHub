@@ -110,14 +110,13 @@ export async function getTeamsByUser(userEmail) {
 }
 
 export async function removeUserFromTeam({ role, email, team_id }) {
-  console.log("removeUserFromTeam", role, email, team_id);
   const roleColumnMap = {
     "Front-end": "email_front",
     "Back-end": "email_back",
-    "UI/UX Дизайн": "email_ui",
+    "UI/UX": "email_ui",
     QA: "email_qa",
     PM: "email_pm",
-    Ментор: "email_mentor",
+    Mentor: "email_mentor",
   };
 
   const column = roleColumnMap[role];
@@ -283,4 +282,80 @@ export async function createRequest({ user_email, team_id, role }) {
   }
 
   return data;
+}
+
+export async function getRequestsByTeamId(team_id) {
+  const { data, error } = await supabase
+    .from("requests")
+    .select("*")
+    .eq("team_id", team_id);
+
+  if (error) {
+    console.error("Error fetching requests:", error.message);
+    throw new Error("Could not fetch requests for this team");
+  }
+
+  return data;
+}
+
+export async function acceptRequestById(request_id) {
+  const { data: requestData, error: requestError } = await supabase
+    .from("requests")
+    .select("team_id, role, user_email")
+    .eq("id", request_id)
+    .single();
+
+  if (requestError || !requestData) {
+    console.error("Error fetching request:", requestError?.message);
+    throw new Error("Could not fetch request details");
+  }
+
+  const { team_id, role, user_email } = requestData;
+
+  const roleColumnMapping = {
+    "Front-end": "email_front",
+    "Back-end": "email_back",
+    "UI/UX": "email_ui",
+    QA: "email_qa",
+    PM: "email_pm",
+    Mentor: "email_mentor",
+  };
+
+  const roleColumn = roleColumnMapping[role];
+
+  if (!roleColumn) {
+    throw new Error(`Unknown role: ${role}`);
+  }
+
+  const { error: teamUpdateError } = await supabase
+    .from("teams")
+    .update({ [roleColumn]: user_email })
+    .eq("id", team_id);
+
+  if (teamUpdateError) {
+    console.error("Error updating team:", teamUpdateError.message);
+    throw new Error("Could not update team with user email");
+  }
+
+  const { error: deleteRequestError } = await supabase
+    .from("requests")
+    .delete()
+    .eq("id", request_id);
+
+  if (deleteRequestError) {
+    console.error("Error deleting request:", deleteRequestError.message);
+    throw new Error("Could not delete request after accepting");
+  }
+}
+
+export async function declineRequestById(requestid) {
+  const { error: deleteRequestError } = await supabase
+    .from("requests")
+    .delete()
+    .eq("id", requestid);
+
+  if (deleteRequestError) {
+    console.error("Error deleting request:", deleteRequestError.message);
+    throw new Error("Could not delete request after declining");
+  }
 }

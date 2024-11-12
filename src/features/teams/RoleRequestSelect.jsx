@@ -4,22 +4,15 @@ import { useRequest } from "./useRequest";
 import { useState } from "react";
 import { useGetTeamById } from "./useGetTeamById";
 
-const rolesList = [
-  "Front-end",
-  "Back-end",
-  "UI/UX Дизайн",
-  "QA",
-  "PM",
-  "Ментор",
-];
+const rolesList = ["Front-end", "Back-end", "UI/UX", "QA", "PM", "Mentor"];
 
 const roleToEmailField = {
   "Front-end": "email_front",
   "Back-end": "email_back",
-  "UI/UX Дизайн": "email_ui",
+  "UI/UX": "email_ui",
   QA: "email_qa",
   PM: "email_pm",
-  Ментор: "email_mentor",
+  Mentor: "email_mentor",
 };
 
 function RoleRequestSelect({ user_email, team_id, team_name }) {
@@ -44,7 +37,6 @@ function RoleRequestSelect({ user_email, team_id, team_name }) {
       return;
     }
 
-    console.log(user_email, team_id, selectedRole);
     request({ user_email, team_id, role: selectedRole });
   };
 

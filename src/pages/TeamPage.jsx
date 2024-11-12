@@ -9,6 +9,8 @@ import { useUser } from "../features/authentication/useUser";
 import RoleLeave from "../features/teams/RoleLeave";
 import TeamDelete from "../features/teams/TeamDelete";
 import RoleRequestSelect from "../features/teams/RoleRequestSelect";
+import { useGetRequestsByTeamId } from "../features/teams/useGetRequestsByTeamId";
+import TeamRequest from "../ui/TeamRequest";
 
 function TeamPage() {
   const { team } = useTeam();
@@ -21,6 +23,7 @@ function TeamPage() {
   const { user: pm } = useGetUserByEmail(team?.email_pm);
   const { user: mentor } = useGetUserByEmail(team?.email_mentor);
   const { teamId } = useParams();
+  const { teamRequests } = useGetRequestsByTeamId(teamId);
 
   const [roleToInvite, setRoleToInvite] = useState("");
   const [roleToLeave, setRoleToLeave] = useState("");
@@ -176,6 +179,21 @@ function TeamPage() {
           <Modal.Open opens="joinRequest">
             <button>Подати запит на приєднання</button>
           </Modal.Open>
+        )}
+
+        {isTeamOwner && teamRequests && teamRequests.length > 0 && (
+          <div>
+            {teamRequests?.length > 0 ? (
+              <div>
+                <h2>Запрошення:</h2>
+                {teamRequests.map((request) => (
+                  <TeamRequest request={request} key={request.id} />
+                ))}
+              </div>
+            ) : (
+              <div>Немає запрошень</div>
+            )}
+          </div>
         )}
       </div>
 
