@@ -28,6 +28,7 @@ export async function signup({ fullName, email, password, linkedin }) {
   return { data, dataUserInfo };
 }
 
+
 export async function login({ email, password }) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -42,6 +43,7 @@ export async function login({ email, password }) {
   return data;
 }
 
+
 export async function getCurrentUser() {
   const { data: session } = await supabase.auth.getSession();
 
@@ -55,6 +57,7 @@ export async function getCurrentUser() {
 
   return data?.user;
 }
+
 
 export async function logout() {
   const { error } = await supabase.auth.signOut();
