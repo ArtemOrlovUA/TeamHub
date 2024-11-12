@@ -13,7 +13,7 @@ import { useGetRequestsByTeamId } from "../features/teams/useGetRequestsByTeamId
 import TeamRequest from "../ui/TeamRequest";
 
 function TeamPage() {
-  const { team } = useTeam();
+  const { team, isLoading } = useTeam();
   const { user } = useUser();
   const { user: teamOwner } = useGetUserByEmail(team?.email_owner);
   const { user: front } = useGetUserByEmail(team?.email_front);
@@ -49,6 +49,10 @@ function TeamPage() {
   ];
 
   const isNotTeamMember = !teamMemberEmails.includes(user?.email);
+
+  if (isLoading) return <div>Завантаження...</div>;
+
+  if (!team) return <div>Вибачте, такої команди не існує</div>;
 
   return (
     <Modal>
@@ -203,8 +207,9 @@ function TeamPage() {
       <Modal.Window name={"invite"}>
         <RoleInvite role={roleToInvite} team_id={teamId} />
       </Modal.Window>
+      {console.log(team)}
       <Modal.Window name={"deleteTeam"}>
-        <TeamDelete team_id={teamId} team_name={team?.teamName} />
+        <TeamDelete team_id={teamId} team_name={team?.teamName} team={team} />
       </Modal.Window>
       <Modal.Window name="joinRequest">
         <RoleRequestSelect

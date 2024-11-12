@@ -14,6 +14,8 @@ import TeamPage from "./pages/TeamPage";
 import InvitesPage from "./pages/InvitesPage";
 import UpdateUserInfo from "./pages/UpdateUserInfo";
 import Teams from "./pages/Teams";
+import { DeletedTeamProvider } from "./context/RateDeletedTeamContext";
+import RateTeamMembersPage from "./pages/RateTeamMembersPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,29 +28,32 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="skills" element={<UserSkillsForm />} />
-            <Route path="invites" element={<InvitesPage />} />
-            <Route path="createTeam" element={<CreateTeamForm />} />
-            <Route path="teams" element={<Teams />} />
-            <Route path="team/:teamId" element={<TeamPage />} />
-          </Route>
-          <Route path="home" element={<Home />} />
-          <Route path="registration" element={<Registration />} />
-          <Route path="login" element={<Login />} />
-          <Route path="account" element={<UpdateUserInfo />} />
-        </Routes>
-      </BrowserRouter>
+      <DeletedTeamProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="skills" element={<UserSkillsForm />} />
+              <Route path="invites" element={<InvitesPage />} />
+              <Route path="createTeam" element={<CreateTeamForm />} />
+              <Route path="teams" element={<Teams />} />
+              <Route path="team/:teamId" element={<TeamPage />} />
+              <Route path="rateTeamMembers" element={<RateTeamMembersPage />} />
+            </Route>
+            <Route path="home" element={<Home />} />
+            <Route path="registration" element={<Registration />} />
+            <Route path="login" element={<Login />} />
+            <Route path="account" element={<UpdateUserInfo />} />
+          </Routes>
+        </BrowserRouter>
+      </DeletedTeamProvider>
 
       <Toaster
         position="top-center"
