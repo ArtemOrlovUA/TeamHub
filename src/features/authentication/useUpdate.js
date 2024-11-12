@@ -8,12 +8,13 @@ export function useUpdate() {
   const { mutate: updateUser, isLoading: isUpdating } = useMutation({
     mutationFn: async (data) => {
       const updateData = {
+        email: data.email,
         fullName: data.fullName,
         linkedin: data.linkedin,
         avatar: data.avatar,
         cv: data.cv,
       };
-      return await updateCurrentUser(updateData);  // Ensure this line is calling with the updateData
+      return await updateCurrentUser(updateData); 
     },
     onSuccess: () => {
       toast.success("User data successfully updated");

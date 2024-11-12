@@ -53,7 +53,12 @@ function UpdateUserDataForm() {
     if (!fullName) return;
 
     updateUser(
-      { fullName, avatar, linkedin, cv },
+      {  email: user.email,
+         fullName,
+         avatar,
+         linkedin, 
+         cv 
+      },
       {
         onSettled: () => {
           setAvatar(null);
@@ -63,7 +68,7 @@ function UpdateUserDataForm() {
       },
     );
 
-    // Update user skills
+    // user skills
     const skillsToUpdate = selectedSkills.map((skill) => skill.value).join(",");
     updateUserSkills({ uid: user.id, skills: skillsToUpdate });
   }
@@ -94,7 +99,7 @@ function UpdateUserDataForm() {
           disabled={isUpdating}
         />
       </FormRow>
-      <FormRow label="Завантажити фото:">
+      <FormRow label="Завантажити/змінити фото:">
         <FileInput
           id="avatar"
           accept="image/*"
@@ -102,12 +107,12 @@ function UpdateUserDataForm() {
           onChange={(e) => setAvatar(e.target.files[0])}
         />
       </FormRow>
-      <FormRow label="Завантажити CV:">
+      <FormRow label="Завантажити/змінити CV:">
         <FileInput
-          id="cv"
-          accept=".pdf,.doc,.docx"
-          disabled={isUpdating}
-          onChange={(e) => setCv(e.target.files[0])}
+        id="cv"
+        accept=".pdf,.doc,.docx"
+        disabled={isUpdating}
+        onChange={(e) => setCv(e.target.files[0])}
         />
       </FormRow>
       <FormRow label="Мої навички:">
@@ -116,7 +121,7 @@ function UpdateUserDataForm() {
           options={skillsList}
           value={selectedSkills}
           onChange={setSelectedSkills}
-          placeholder="Select skills..."
+          placeholder="Обрати навички..."
         />
       </FormRow>
       <FormRow>
