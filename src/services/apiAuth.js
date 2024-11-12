@@ -62,47 +62,51 @@ export async function logout() {
   if (error) throw new Error(error.message);
 }
 
-export async function updateCurrentUser({
-  password,
-  fullName,
-  avatar,
-  linkedin,
-  cv,
-}) {
+export async function updateCurrentUser({ fullName, avatar, linkedin, cv }) {
   let updateData = { data: {} };
 
-  if (password) updateData.password = password;
   if (fullName) updateData.data.fullName = fullName;
-  if (linkedin) updateData.data.linkedin = linkedin;
+  if (linkedin) updateData.data.linkedIn = linkedin; // Note: linkedIn is case-sensitive
 
-  const { data, error } = await supabase.auth.updateUser(updateData);
+  console.log("Updating user with data:", updateData);
 
-  if (error) throw new Error(error.message);
-
+  // Handle avatar upload
   if (avatar) {
-    const fileName = `avatar-${data.user.id}-${Math.random()}`;
-    const { error: errorUploadAvatar } = await supabase.storage
+    const fileName = `avatar-${Date.now()}`;
+    const { data: avatarUpload, error: avatarError } = await supabase.storage
       .from("avatars")
       .upload(fileName, avatar);
-    if (errorUploadAvatar) throw new Error(errorUploadAvatar.message);
+    if (avatarError) throw new Error(avatarError.message);
 
     updateData.data.avatar = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
   }
 
+  // Handle CV upload
   if (cv) {
-    const cvFileName = `cv-${data.user.id}-${Math.random()}`;
-    const { error: errorUploadCv } = await supabase.storage
+    const cvFileName = `cv-${Date.now()}`;
+    const { data: cvUpload, error: cvError } = await supabase.storage
       .from("cvs")
       .upload(cvFileName, cv);
-    if (errorUploadCv) throw new Error(errorUploadCv.message);
+    if (cvError) throw new Error(cvError.message);
 
-    // Update CV URL in the user metadata
     updateData.data.cv = `${supabaseUrl}/storage/v1/object/public/cvs/${cvFileName}`;
   }
 
-  const { data: updatedUser, error: errorUpdateMetadata } =
-    await supabase.auth.updateUser(updateData);
-  if (errorUpdateMetadata) throw new Error(errorUpdateMetadata.message);
+  // Update the auth user metadata if needed (optional)
+  const { data, error } = await supabase.auth.updateUser(updateData);
+  if (error) throw new Error(error.message);
 
-  return updatedUser;
+  // Update custom fields in userInfo table using "id" as the filter
+  const { error: customTableError } = await supabase
+    .from("userInfo")
+    .update({
+      fullName,
+      linkedIn: linkedin, // Ensure casing matches your table column
+    })
+    .eq("id", data.user.id); // Assumes `id` links to the user's ID in userInfo
+
+  if (customTableError) throw new Error(customTableError.message);
+
+  return data.user;
 }
+

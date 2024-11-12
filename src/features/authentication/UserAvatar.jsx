@@ -32,6 +32,7 @@ function UserAvatar() {
       <Avatar src={avatar} alt={`Avatar of ${fullName}`} />
       <span>{fullName}</span>
       {linkedin && (
+        
         <a href={linkedin} target="_blank" rel="noopener noreferrer">
           LinkedIn
         </a>

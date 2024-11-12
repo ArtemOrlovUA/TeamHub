@@ -3,18 +3,19 @@ import { getUserSkills } from "../../services/apiUser";
 import { useUser } from "../authentication/useUser";
 
 export function useGetSkills() {
-  const user = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
 
   const {
-    isLoading,
+    isLoading: isSkillsLoading,
     data: skillsData,
     error,
   } = useQuery({
-    queryKey: ["skills", user.user.id],
-    queryFn: () => getUserSkills(user.user.id),
+    queryKey: ["skills", user?.id],
+    queryFn: () => (user ? getUserSkills(user.id) : Promise.resolve([])), // only query if user is available
+    enabled: !!user, // enable query only when user is defined
   });
 
   const skills = skillsData ? skillsData[0]?.skills.split(",") : [];
 
-  return { isLoading, skills, error };
+  return { isLoading: isUserLoading || isSkillsLoading, skills, error };
 }

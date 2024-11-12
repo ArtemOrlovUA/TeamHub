@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Select from "react-select";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
@@ -7,13 +8,29 @@ import Input from "../../ui/Input";
 
 import { useUser } from "./useUser";
 import { useUpdate } from "./useUpdate";
+import { useUpdateUserSkills } from "../userSkills/useUpdateUserSkills";
+import { useGetSkills } from "../userSkills/useGetSkills";
+
+const skillsList = [
+  { value: "Front-end", label: "Front-end" },
+  { value: "Back-end", label: "Back-end" },
+  { value: "UI/UX Design", label: "UI/UX Design" },
+  { value: "QA", label: "QA" },
+  { value: "PM", label: "PM" },
+  { value: "Mentor", label: "Mentor" },
+];
 
 function UpdateUserDataForm() {
   const { user, isLoading } = useUser();
   const { updateUser, isUpdating } = useUpdate();
+  const { updateUserSkills } = useUpdateUserSkills();
+  const { skills: currentSkills, isLoading: isSkillsLoading } = useGetSkills();
+
   const [fullName, setFullName] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const [cv, setCv] = useState(null);
   const [linkedin, setLinkedin] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState([]);
 
   useEffect(() => {
     if (user?.user_metadata) {
@@ -22,30 +39,44 @@ function UpdateUserDataForm() {
     }
   }, [user]);
 
-  function handleSubmit(e) {
+  useEffect(() => {
+    if (currentSkills.length > 0 && selectedSkills.length === 0) {
+      const initialSkills = currentSkills
+        .map((skill) => skillsList.find((s) => s.value === skill))
+        .filter(Boolean);
+      setSelectedSkills(initialSkills);
+    }
+  }, [currentSkills, selectedSkills.length]);
+
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!fullName) return;
 
     updateUser(
-      { fullName, avatar, linkedin },
+      { fullName, avatar, linkedin, cv },
       {
         onSettled: () => {
           setAvatar(null);
+          setCv(null);
           e.target.reset();
         },
       },
     );
+
+    // Update user skills
+    const skillsToUpdate = selectedSkills.map((skill) => skill.value).join(",");
+    updateUserSkills({ uid: user.id, skills: skillsToUpdate });
   }
 
-  if (isLoading) return <p>Loading user data...</p>;
+  if (isLoading || isSkillsLoading) return <p>Loading user data...</p>;
   if (!user) return <p>No user data available.</p>;
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormRow label="Email address">
+      <FormRow label="Електронна пошта:">
         <Input value={user.email || ""} disabled />
       </FormRow>
-      <FormRow label="Full name">
+      <FormRow label="Повне ім'я:">
         <Input
           type="text"
           value={fullName}
@@ -54,7 +85,7 @@ function UpdateUserDataForm() {
           disabled={isUpdating}
         />
       </FormRow>
-      <FormRow label="LinkedIn URL">
+      <FormRow label="LinkedIn:">
         <Input
           type="text"
           value={linkedin}
@@ -63,7 +94,7 @@ function UpdateUserDataForm() {
           disabled={isUpdating}
         />
       </FormRow>
-      <FormRow label="Avatar image">
+      <FormRow label="Завантажити фото:">
         <FileInput
           id="avatar"
           accept="image/*"
@@ -71,16 +102,25 @@ function UpdateUserDataForm() {
           onChange={(e) => setAvatar(e.target.files[0])}
         />
       </FormRow>
-      <FormRow label="Upload CV">
+      <FormRow label="Завантажити CV:">
         <FileInput
           id="cv"
           accept=".pdf,.doc,.docx"
           disabled={isUpdating}
-          // onChange={(e) => setCv(e.target.files[0])}
+          onChange={(e) => setCv(e.target.files[0])}
+        />
+      </FormRow>
+      <FormRow label="Мої навички:">
+        <Select
+          isMulti
+          options={skillsList}
+          value={selectedSkills}
+          onChange={setSelectedSkills}
+          placeholder="Select skills..."
         />
       </FormRow>
       <FormRow>
-        <Button disabled={isUpdating}>Update account data</Button>
+        <Button disabled={isUpdating}>Зберегти</Button>
       </FormRow>
     </Form>
   );

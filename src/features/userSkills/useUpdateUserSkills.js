@@ -5,19 +5,21 @@ import toast from "react-hot-toast";
 
 export function useUpdateUserSkills() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { mutate: updateUserSkills, isLoading: isUpdatingSkills } = useMutation(
     {
       mutationFn: ({ uid, skills }) => updateUserSkillsApi({ uid, skills }),
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: 'user' });
         navigate("/dashboard", { replace: true });
-        toast.success("Навички успішно оновлено");
+        toast.success("Skills updated successfully");
       },
       onError: (error) => {
         console.error(error);
-        toast.error("Виникла помилка при оновленні навичок");
+        toast.error("An error occurred while updating skills");
       },
-    },
+    }
   );
 
   return { updateUserSkills, isUpdatingSkills };
