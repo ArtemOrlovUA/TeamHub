@@ -1,11 +1,17 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function signup({ fullName, email, password }) {
+export async function signup({ fullName, email, password, linkedin }) {
+  console.log({ fullName, email, password, linkedin });
+
+  const { dataUserInfo, errorUserInfo } = await supabase
+    .from("userInfo")
+    .insert([{ email: email, fullName: fullName, linkedIn: linkedin }]);
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { fullName, avatar: "" },
+      data: { fullName, avatar: "", linkedin },
     },
   });
 
@@ -14,8 +20,14 @@ export async function signup({ fullName, email, password }) {
     throw new Error("Signup failed");
   }
 
-  return data;
+  if (errorUserInfo) {
+    console.error(errorUserInfo.message);
+    throw new Error("Signup failed");
+  }
+
+  return { data, dataUserInfo };
 }
+
 
 export async function login({ email, password }) {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -31,6 +43,7 @@ export async function login({ email, password }) {
   return data;
 }
 
+
 export async function getCurrentUser() {
   const { data: session } = await supabase.auth.getSession();
 
@@ -45,38 +58,58 @@ export async function getCurrentUser() {
   return data?.user;
 }
 
+
 export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) throw new Error(error.message);
 }
 
-export async function updateCurrentUser({ password, fullName, avatar }) {
-  let updateData;
 
-  if (password) updateData = { password };
-  if (fullName) updateData = { data: { fullName } };
+export async function updateCurrentUser({ fullName, avatar, linkedin, cv }) {
+  let updateData = { data: {} };
+
+  if (fullName) updateData.data.fullName = fullName;
+  if (linkedin) updateData.data.linkedIn = linkedin; // Note: linkedIn is case-sensitive
+
+  console.log("Updating user with data:", updateData);
+
+  // Handle avatar upload
+  if (avatar) {
+    const fileName = `avatar-${Date.now()}`;
+    const { data: avatarUpload, error: avatarError } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, avatar);
+    if (avatarError) throw new Error(avatarError.message);
+
+    updateData.data.avatar = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+  }
+
+  // Handle CV upload
+  if (cv) {
+    const cvFileName = `cv-${Date.now()}`;
+    const { data: cvUpload, error: cvError } = await supabase.storage
+      .from("cvs")
+      .upload(cvFileName, cv);
+    if (cvError) throw new Error(cvError.message);
+
+    updateData.data.cv = `${supabaseUrl}/storage/v1/object/public/cvs/${cvFileName}`;
+  }
+
 
   const { data, error } = await supabase.auth.updateUser(updateData);
-
   if (error) throw new Error(error.message);
 
-  if (!avatar) return data;
+  // Update custom fields in userInfo table using "id" as the filter
+  const { error: customTableError } = await supabase
+    .from("userInfo")
+    .update({
+      fullName,
+      linkedIn: linkedin, // Ensure casing matches your table column
+    })
+    .eq("id", data.user.id); // Assumes `id` links to the user's ID in userInfo
 
-  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+  if (customTableError) throw new Error(customTableError.message);
 
-  const { error: errorUpload } = await supabase.storage
-    .from("avatars")
-    .upload(fileName, avatar);
-  if (errorUpload) throw new Error(errorUpload.message);
-
-  const { data: updatedUser, error: errorUpdateImage } =
-    supabase.auth.updateUser({
-      data: {
-        avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-      },
-    });
-  if (errorUpdateImage) throw new Error(errorUpdateImage.message);
-
-  return updatedUser;
+  return data.user;
 }
