@@ -4,8 +4,8 @@ import supabase from "./supabase";
 export async function updateUserSkills({ uid, skills }) {
   const { data, error } = await supabase
     .from("userSkills")
-    .upsert({ uid, skills }) 
-    .eq("uid", uid); 
+    .upsert({ uid, skills })
+    .eq("uid", uid);
 
   if (error) {
     console.error("Error updating user skills:", error.message);
@@ -53,16 +53,101 @@ export async function getUserByEmail(user_email) {
 //   const updateData = {};
 //   if (fullName) updateData.fullName = fullName;
 //   if (linkedin) updateData.linkedIn = linkedin;
+// Updates the user's full name and LinkedIn URL in the userInfo table
+export async function updateUserInfo({ uid, fullName, linkedin }) {
+  const updateData = {};
+  if (fullName) updateData.fullName = fullName;
+  if (linkedin) updateData.linkedin = linkedin;
 
-//   const { data, error } = await supabase
-//     .from("userInfo")
-//     .update(updateData)
-//     .eq("email", email); 
+  const { data, error } = await supabase
+    .from("userInfo")
+    .update(updateData)
+    .eq("uid", uid);
 
-//   if (error) {
-//     console.error("Error updating user info:", error.message);
-//     throw new Error("Could not update user information");
-//   }
+  if (error) {
+    console.error("Error updating user info:", error.message);
+    throw new Error("Could not update user information");
+  }
+  //   const { data, error } = await supabase
+  //     .from("userInfo")
+  //     .update(updateData)
+  //     .eq("email", email);
 
-//   return data;
-// }
+  //   if (error) {
+  //     console.error("Error updating user info:", error.message);
+  //     throw new Error("Could not update user information");
+  //   }
+
+  //   return data;
+  // }
+
+  return data;
+}
+
+export async function getUserRatingByEmail(email) {
+  const { data, error } = await supabase
+    .from("userInfo")
+    .select("rating")
+    .eq("email", email);
+
+  if (error) {
+    console.error("Error fetching user rating:", error.message);
+    throw new Error("Could not fetch user rating");
+  }
+
+  return data;
+}
+
+export async function upvoteUserRating(email) {
+  const { data: currentData, error: fetchError } = await supabase
+    .from("userInfo")
+    .select("rating")
+    .eq("email", email)
+    .single();
+
+  if (fetchError) {
+    console.error("Error fetching user rating:", fetchError.message);
+    throw new Error("Could not fetch user rating");
+  }
+
+  const newRating = (currentData.rating || 0) + 1;
+
+  const { data, error } = await supabase
+    .from("userInfo")
+    .update({ rating: newRating })
+    .eq("email", email);
+
+  if (error) {
+    console.error("Error upvoting user rating:", error.message);
+    throw new Error("Could not upvote user rating");
+  }
+
+  return data;
+}
+
+export async function downvoteUserRating(email) {
+  const { data: currentData, error: fetchError } = await supabase
+    .from("userInfo")
+    .select("rating")
+    .eq("email", email)
+    .single();
+
+  if (fetchError) {
+    console.error("Error fetching user rating:", fetchError.message);
+    throw new Error("Could not fetch user rating");
+  }
+
+  const newRating = currentData.rating < 1 ? 0 : (currentData.rating || 0) - 1;
+
+  const { data, error } = await supabase
+    .from("userInfo")
+    .update({ rating: newRating })
+    .eq("email", email);
+
+  if (error) {
+    console.error("Error downvoting user rating:", error.message);
+    throw new Error("Could not downvote user rating");
+  }
+
+  return data;
+}

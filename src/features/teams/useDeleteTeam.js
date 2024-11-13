@@ -12,17 +12,15 @@ export function useDeleteTeam() {
 
   const { isLoading: isDeleting, mutate: deleteTeam } = useMutation({
     mutationFn: ({ team_id, team }) => {
-      console.log(team);
       deleteTeamApi(team_id);
       saveTeam(team);
     },
     onSuccess: (team_id) => {
-      console.log(team_id);
       toast.success("Команда успішно видалена");
       queryClient.invalidateQueries({ queryKey: ["team"] });
       queryClient.invalidateQueries({ queryKey: ["teams"] });
       queryClient.invalidateQueries({ queryKey: ["team", team_id] });
-      navigate("/dashboard");
+      navigate("/rateTeamMembers");
     },
     onError: (error) => {
       toast.error(error.message);

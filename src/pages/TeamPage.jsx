@@ -202,12 +202,16 @@ function TeamPage() {
       </div>
 
       <Modal.Window name={"leave"}>
-        <RoleLeave role={roleToLeave} team_id={teamId} email={user?.email} />
+        <RoleLeave
+          role={roleToLeave}
+          team_id={teamId}
+          email={user?.email}
+          team={team}
+        />
       </Modal.Window>
       <Modal.Window name={"invite"}>
         <RoleInvite role={roleToInvite} team_id={teamId} />
       </Modal.Window>
-      {console.log(team)}
       <Modal.Window name={"deleteTeam"}>
         <TeamDelete team_id={teamId} team_name={team?.teamName} team={team} />
       </Modal.Window>

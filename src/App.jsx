@@ -46,11 +46,11 @@ function App() {
               <Route path="teams" element={<Teams />} />
               <Route path="team/:teamId" element={<TeamPage />} />
               <Route path="rateTeamMembers" element={<RateTeamMembersPage />} />
+              <Route path="account" element={<UpdateUserInfo />} />
             </Route>
             <Route path="home" element={<Home />} />
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
-            <Route path="account" element={<UpdateUserInfo />} />
           </Routes>
         </BrowserRouter>
       </DeletedTeamProvider>

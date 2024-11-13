@@ -11,7 +11,7 @@ export function useLeave() {
       removeUserFromTeam({ email, role, team_id }),
     onSuccess: () => {
       toast.success("Роль успішно покинута!");
-      navigate("/dashboard");
+      navigate("/rateTeamMembers");
     },
     onError: (error) => {
       console.error("Error leaving team:", error);

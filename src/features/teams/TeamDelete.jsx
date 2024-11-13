@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useDeleteTeam } from "./useDeleteTeam";
 
 function TeamDelete({ team_id, team_name, team }) {
-  console.log("team", team);
   const { deleteTeam } = useDeleteTeam();
 
   const { handleSubmit } = useForm();
