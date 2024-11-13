@@ -45,6 +45,14 @@ export async function getUserByEmail(user_email) {
   return data;
 }
 
+// export async function updateUserInfo({ email, fullName, linkedin }) {
+//   if (!email) {
+//     throw new Error("Email is required for updating user information");
+//   }
+
+//   const updateData = {};
+//   if (fullName) updateData.fullName = fullName;
+//   if (linkedin) updateData.linkedIn = linkedin;
 // Updates the user's full name and LinkedIn URL in the userInfo table
 export async function updateUserInfo({ uid, fullName, linkedin }) {
   const updateData = {};
@@ -60,6 +68,18 @@ export async function updateUserInfo({ uid, fullName, linkedin }) {
     console.error("Error updating user info:", error.message);
     throw new Error("Could not update user information");
   }
+  //   const { data, error } = await supabase
+  //     .from("userInfo")
+  //     .update(updateData)
+  //     .eq("email", email);
+
+  //   if (error) {
+  //     console.error("Error updating user info:", error.message);
+  //     throw new Error("Could not update user information");
+  //   }
+
+  //   return data;
+  // }
 
   return data;
 }

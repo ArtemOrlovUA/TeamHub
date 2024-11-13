@@ -8,6 +8,7 @@ export function useUpdate() {
   const { mutate: updateUser, isLoading: isUpdating } = useMutation({
     mutationFn: async (data) => {
       const updateData = {
+        email: data.email,
         fullName: data.fullName,
         linkedin: data.linkedin,
         avatar: data.avatar,
