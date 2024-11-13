@@ -33,7 +33,7 @@ function Dashboard() {
       )}
       <Link to={"/createTeam"}>Створити команду</Link>
       <p>Чи</p>
-      <button>Приєднатися до команди</button>
+      <Link to={"/teams"}>Приєднатися до команди</Link>
 
       {userTeams?.filter(
         (userTeam) => !teams?.some((team) => team.id === userTeam.id),
