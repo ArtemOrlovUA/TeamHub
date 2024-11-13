@@ -8,6 +8,5 @@ ready:
 4. add cv and save it in the db (implement in the same way as avatars)
 
 left:
-6. validation 
-7. show that there are current files chosen 
-5. show cv near the skills on dashboard 
+5. validation 
+6. show cv near the skills on dashboard 

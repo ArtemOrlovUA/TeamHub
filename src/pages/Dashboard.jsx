@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
+import { useUserCV } from "../features/authentication/useUserCV";  
 import { useGetSkills } from "../features/userSkills/useGetSkills";
 import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
 import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
@@ -7,15 +8,23 @@ import { useGetAllUserTeams } from "../features/teams/useGetAllUserTeams";
 
 function Dashboard() {
   const { user } = useUser();
+  const { cvUrl } = useUserCV(); 
   const { skills } = useGetSkills();
-  const { teams } = useGetTeamsByCreator(user.email);
-  const { userTeams } = useGetAllUserTeams(user.email);
-  const { personInvites } = useGetInvitesByEmail(user.email);
+  const { teams } = useGetTeamsByCreator(user?.email);
+  const { userTeams } = useGetAllUserTeams(user?.email);
+  const { personInvites } = useGetInvitesByEmail(user?.email);
 
   return (
     <>
-      <div>Ваша пошта: {user.email}</div>
+      <div>Ваша пошта: {user?.email}</div>
       {skills && <div>Ваші навички: {skills?.join(", ")}</div>}
+      {cvUrl && (
+        <div>
+          <a href={cvUrl} target="_blank" rel="noopener noreferrer">
+            Подивитися резюме
+          </a>
+        </div>
+      )}
       {personInvites?.length > 0 && (
         <div>
           <Link to={"/invites"}>Подивіться нові запрошення</Link>

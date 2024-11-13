@@ -53,12 +53,7 @@ function UpdateUserDataForm() {
     if (!fullName) return;
 
     updateUser(
-      {  email: user.email,
-         fullName,
-         avatar,
-         linkedin, 
-         cv 
-      },
+      { email: user.email, fullName, avatar, linkedin, cv },
       {
         onSettled: () => {
           setAvatar(null);
@@ -109,10 +104,10 @@ function UpdateUserDataForm() {
       </FormRow>
       <FormRow label="Завантажити/змінити CV:">
         <FileInput
-        id="cv"
-        accept=".pdf,.doc,.docx"
-        disabled={isUpdating}
-        onChange={(e) => setCv(e.target.files[0])}
+          id="cv"
+          accept=".pdf,.doc,.docx"
+          disabled={isUpdating}
+          onChange={(e) => setCv(e.target.files[0])}
         />
       </FormRow>
       <FormRow label="Мої навички:">
