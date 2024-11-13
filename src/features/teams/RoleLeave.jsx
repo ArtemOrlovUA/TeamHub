@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 import { useForm } from "react-hook-form";
 import { useLeave } from "./useLeave";
+import { useDeletedTeam } from "../../context/RateDeletedTeamContext";
 
-function RoleLeave({ role, team_id, email }) {
+function RoleLeave({ role, team_id, email, team }) {
   const { leave } = useLeave();
+  const { saveTeam } = useDeletedTeam();
 
   const { handleSubmit } = useForm();
 
   const onSubmit = () => {
     leave({ email, role, team_id });
+    saveTeam(team);
   };
 
   return (

@@ -11,15 +11,15 @@ export function useUpdateUserSkills() {
     {
       mutationFn: ({ uid, skills }) => updateUserSkillsApi({ uid, skills }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: 'user' });
+        queryClient.invalidateQueries({ queryKey: "user" });
         navigate("/dashboard", { replace: true });
-        toast.success("Skills updated successfully");
+        toast.success("Дані користувача успішно оновлено");
       },
       onError: (error) => {
         console.error(error);
         toast.error("An error occurred while updating skills");
       },
-    }
+    },
   );
 
   return { updateUserSkills, isUpdatingSkills };

@@ -4,18 +4,28 @@ import { useGetSkills } from "../features/userSkills/useGetSkills";
 import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
 import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
 import { useGetAllUserTeams } from "../features/teams/useGetAllUserTeams";
+import { useEffect } from "react";
+import { useDeletedTeam } from "../context/RateDeletedTeamContext";
+import { useGetUserRatingByEmail } from "../features/ratings/useGetUserRatingByEmail";
 
 function Dashboard() {
   const { user } = useUser();
+  const { userRating } = useGetUserRatingByEmail(user?.email);
   const { skills } = useGetSkills();
   const { teams } = useGetTeamsByCreator(user.email);
   const { userTeams } = useGetAllUserTeams(user.email);
   const { personInvites } = useGetInvitesByEmail(user.email);
+  const { clearTeam } = useDeletedTeam();
+
+  useEffect(() => {
+    clearTeam();
+  }, []);
 
   return (
     <>
       <div>Ваша пошта: {user.email}</div>
       {skills && <div>Ваші навички: {skills?.join(", ")}</div>}
+      <div>Ваш рейтинг: {userRating && userRating[0].rating}</div>
       {personInvites?.length > 0 && (
         <div>
           <Link to={"/invites"}>Подивіться нові запрошення</Link>
