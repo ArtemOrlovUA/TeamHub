@@ -1,3 +1,4 @@
+// UpdateUserDataForm.js
 import { useState, useEffect } from "react";
 import Select from "react-select";
 import Button from "../../ui/Button";
@@ -5,7 +6,6 @@ import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-
 import { useUser } from "./useUser";
 import { useUpdate } from "./useUpdate";
 import { useUpdateUserSkills } from "../userSkills/useUpdateUserSkills";
@@ -21,11 +21,12 @@ const skillsList = [
 ];
 
 function UpdateUserDataForm() {
-  const { user, isLoading } = useUser();
+  const { user, isLoading, refetch: refetchUser } = useUser();
   const { updateUser, isUpdating } = useUpdate();
   const { updateUserSkills } = useUpdateUserSkills();
   const { skills: currentSkills, isLoading: isSkillsLoading } = useGetSkills();
 
+  // State management
   const [fullName, setFullName] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [cv, setCv] = useState(null);
@@ -52,20 +53,24 @@ function UpdateUserDataForm() {
     e.preventDefault();
     if (!fullName) return;
 
-    updateUser(
+    // Update user data including avatar
+    await updateUser(
       { email: user.email, fullName, avatar, linkedin, cv },
       {
         onSettled: () => {
-          setAvatar(null);
+          setAvatar(null); // Reset avatar input field
           setCv(null);
           e.target.reset();
         },
       },
     );
 
-    // user skills
+    // Update user skills
     const skillsToUpdate = selectedSkills.map((skill) => skill.value).join(",");
-    updateUserSkills({ uid: user.id, skills: skillsToUpdate });
+    await updateUserSkills({ uid: user.id, skills: skillsToUpdate });
+
+    // Refetch user data to get updated avatar URL
+    refetchUser();
   }
 
   if (isLoading || isSkillsLoading) return <p>Loading user data...</p>;

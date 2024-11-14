@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
+import { useUserCV } from "../features/authentication/useUserCV";  
 import { useGetSkills } from "../features/userSkills/useGetSkills";
 import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
 import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
@@ -11,6 +12,7 @@ import { useGetUserRatingByEmail } from "../features/ratings/useGetUserRatingByE
 function Dashboard() {
   const { user } = useUser();
   const { userRating } = useGetUserRatingByEmail(user?.email);
+  const { cvUrl } = useUserCV();
   const { skills } = useGetSkills();
   const { teams } = useGetTeamsByCreator(user.email);
   const { userTeams } = useGetAllUserTeams(user.email);
@@ -23,6 +25,11 @@ function Dashboard() {
 
   return (
     <>
+       {cvUrl && (
+        <div>
+          <a href={cvUrl} target="_blank" rel="noopener noreferrer">Подивитися резюме</a>
+        </div>
+      )}
       <div>Ваша пошта: {user.email}</div>
       {skills && <div>Ваші навички: {skills?.join(", ")}</div>}
       <div>Ваш рейтинг: {userRating && userRating[0].rating}</div>

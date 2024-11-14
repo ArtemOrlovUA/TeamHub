@@ -75,23 +75,28 @@ export async function updateCurrentUser({ email, fullName, avatar, linkedin, cv 
   if (fullName) updateData.fullName = fullName;
   if (linkedin) updateData.linkedIn = linkedin;
 
+  // Upload avatar to storage if provided
   if (avatar) {
-    const fileName = `avatar-${Date.now()}`;
+    const avatarFileName = `avatar-${Date.now()}`;
     const { data: avatarUpload, error: avatarError } = await supabase.storage
       .from("avatars")
-      .upload(fileName, avatar);
-    if (avatarError) throw new Error(avatarError.message);
+      .upload(avatarFileName, avatar);
 
-    updateData.data.avatar = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+    if (avatarError) throw new Error(`Avatar upload error: ${avatarError.message}`);
+    
+    // Set public URL for the avatar in metadata
+    updateData.avatar = `${supabaseUrl}/storage/v1/object/public/avatars/${avatarFileName}`;
   }
 
   // CV 
   if (cv) {
-    const cvFileName = `cv-${Date.now()}`;
+    const cvFileName = `cv-${email}-${Date.now()}`;
     const { data: cvUpload, error: cvError } = await supabase.storage
-      .from("cvs")  // Ensure this bucket exists
+      .from("cvs")
       .upload(cvFileName, cv);
-    if (cvError) throw new Error(cvError.message);
+    if (cvError) throw new Error(`CV upload failed: ${cvError.message}`);
+
+    updateData.cv = cvFileName; 
   }
 
   // auth user metadata 
