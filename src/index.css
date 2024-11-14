@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Montserrat-Bold";
+    src: local("Montserrat-Bold.ttf"),
+    url(./assets/fonts/Montserrat-Bold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Montserrat-Regular";
+    src: local("Montserrat-Regular.ttf"),
+    url(./assets/fonts/Montserrat-Regular.ttf) format("truetype");
+}
