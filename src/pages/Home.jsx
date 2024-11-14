@@ -51,7 +51,7 @@ function Home() {
 
         {/* Hero Image Section */}
         <div className="md:w-1/2 flex items-center justify-center mt-10 md:mt-0">
-          <img src="./src/assets/img/HeroImg.png" alt="Hero" className="w-full max-w-lg" />
+          <img src="public/HeroImg.png" alt="Hero" className="w-full max-w-lg" />
         </div>
       </div>
 
