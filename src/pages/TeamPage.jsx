@@ -4,7 +4,7 @@ import RoleInvite from "../features/teams/RoleInvite";
 import { useGetUserByEmail } from "../features/teams/useGetUserByEmail";
 import { useTeam } from "../features/teams/useTeam";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 import RoleLeave from "../features/teams/RoleLeave";
 import TeamDelete from "../features/teams/TeamDelete";
@@ -67,10 +67,21 @@ function TeamPage() {
       <div>
         <h1>Команда: {team?.teamName}</h1>
         <span>
-          <p>Власник: {(teamOwner && teamOwner[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>Власник: </span>
+            <Link to={`/profile/${teamOwner[0]?.id}`}>
+              {teamOwner[0]?.fullName}
+            </Link>
+          </p>
         </span>
         <span>
-          <p>Front: {(front && front[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>Front-end: </span>
+            {(front && (
+              <Link to={`/profile/${front[0]?.id}`}>{front[0]?.fullName}</Link>
+            )) ||
+              " відсутній"}
+          </p>
           {isTeamOwner && !team.email_front ? (
             <Modal.Open
               opens={"invite"}
@@ -98,7 +109,14 @@ function TeamPage() {
           ) : null}
         </span>
         <span>
-          <p>Back: {(back && back[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>Back-end: </span>
+
+            {(back && (
+              <Link to={`/profile/${back[0]?.id}`}>{back[0]?.fullName}</Link>
+            )) ||
+              " відсутній"}
+          </p>
           {isTeamOwner && !team.email_back ? (
             <Modal.Open
               opens={"invite"}
@@ -124,7 +142,13 @@ function TeamPage() {
           ) : null}
         </span>
         <span>
-          <p>UI/UX: {(ui && ui[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>UI/UX: </span>
+            {(ui && (
+              <Link to={`/profile/${ui[0]?.id}`}>{ui[0]?.fullName}</Link>
+            )) ||
+              " відсутній"}
+          </p>
           {isTeamOwner && !team.email_ui ? (
             <Modal.Open
               opens={"invite"}
@@ -150,7 +174,13 @@ function TeamPage() {
           ) : null}
         </span>
         <span>
-          <p>QA: {(qa && qa[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>QA: </span>
+            {(qa && (
+              <Link to={`/profile/${qa[0]?.id}`}>{qa[0]?.fullName}</Link>
+            )) ||
+              " відсутній"}
+          </p>
           {isTeamOwner && !team.email_qa ? (
             <Modal.Open
               opens={"invite"}
@@ -176,7 +206,13 @@ function TeamPage() {
           ) : null}
         </span>
         <span>
-          <p>PM: {(pm && pm[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>PM: </span>
+            {(ui && (
+              <Link to={`/profile/${pm[0]?.id}`}>{pm[0]?.fullName}</Link>
+            )) ||
+              " відсутній"}
+          </p>
           {isTeamOwner && !team.email_pm ? (
             <Modal.Open
               opens={"invite"}
@@ -202,7 +238,15 @@ function TeamPage() {
           ) : null}
         </span>
         <span>
-          <p>Mentor: {(mentor && mentor[0]?.fullName) || "відсутній"}</p>
+          <p>
+            <span>Ментор: </span>
+            {(ui && (
+              <Link to={`/profile/${mentor[0]?.id}`}>
+                {mentor[0]?.fullName}
+              </Link>
+            )) ||
+              " відсутній"}
+          </p>
           {isTeamOwner && !team.email_mentor ? (
             <Modal.Open
               opens={"invite"}
