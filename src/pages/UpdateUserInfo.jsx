@@ -9,3 +9,18 @@ function UpdateInfo() {
 }
 
 export default UpdateInfo;
+
+
+
+// import Header from "../ui/Header";
+
+// function UpdateInfo() {
+//   return (
+//     <div>
+//       <Header />
+//       <UpdateUserDataForm />
+//     </div>
+//   );
+// }
+
+// export default UpdateInfo;
