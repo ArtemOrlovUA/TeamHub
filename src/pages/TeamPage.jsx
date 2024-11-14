@@ -11,7 +11,7 @@ import TeamDelete from "../features/teams/TeamDelete";
 import RoleRequestSelect from "../features/teams/RoleRequestSelect";
 import { useGetRequestsByTeamId } from "../features/teams/useGetRequestsByTeamId";
 import TeamRequest from "../ui/TeamRequest";
-import RoleKick from "../features/teams/roleKick";
+import RoleKick from "../features/teams/RoleKick";
 
 function TeamPage() {
   const { team, isLoading } = useTeam();
