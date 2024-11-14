@@ -8,7 +8,7 @@ function DeletedTeamProvider({ children }) {
   const [team, setTeam] = useLocalStorageState(null, "teamKey");
 
   function saveTeam(teamObject) {
-    console.log("teamObject", teamObject);
+    clearTeam();
     setTeam(teamObject);
   }
 

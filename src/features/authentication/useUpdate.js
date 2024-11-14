@@ -14,14 +14,13 @@ export function useUpdate() {
         avatar: data.avatar,
         cv: data.cv,
       };
-      return await updateCurrentUser(updateData); 
+      return await updateCurrentUser(updateData);
     },
     onSuccess: () => {
-      toast.success("User data successfully updated");
-      queryClient.invalidateQueries({ queryKey: 'user' });
+      toast.success("Дані користувача успішно оновлено");
+      queryClient.invalidateQueries({ queryKey: "user" });
     },
   });
-  
 
   return { updateUser, isUpdating };
 }
