@@ -16,6 +16,7 @@ import UpdateUserInfo from "./pages/UpdateUserInfo";
 import Teams from "./pages/Teams";
 import { DeletedTeamProvider } from "./context/RateDeletedTeamContext";
 import RateTeamMembersPage from "./pages/RateTeamMembersPage";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,7 @@ function App() {
               <Route path="team/:teamId" element={<TeamPage />} />
               <Route path="rateTeamMembers" element={<RateTeamMembersPage />} />
               <Route path="account" element={<UpdateUserInfo />} />
+              <Route path="profile/:id" element={<UserProfile />} />
             </Route>
             <Route path="home" element={<Home />} />
             <Route path="registration" element={<Registration />} />

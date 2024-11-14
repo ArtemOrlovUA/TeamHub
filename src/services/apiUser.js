@@ -45,6 +45,20 @@ export async function getUserByEmail(user_email) {
   return data;
 }
 
+export async function getUserById(id) {
+  const { data, error } = await supabase
+    .from("userInfo")
+    .select("*")
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error fetching user by ID:", error.message);
+    throw new Error("Could not fetch user info for this ID");
+  }
+
+  return data;
+}
+
 // export async function updateUserInfo({ email, fullName, linkedin }) {
 //   if (!email) {
 //     throw new Error("Email is required for updating user information");

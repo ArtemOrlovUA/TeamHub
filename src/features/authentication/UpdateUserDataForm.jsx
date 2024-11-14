@@ -26,6 +26,9 @@ function UpdateUserDataForm() {
   const { updateUserSkills } = useUpdateUserSkills();
   const { skills: currentSkills, isLoading: isSkillsLoading } = useGetSkills();
 
+  console.log(currentSkills);
+  const currentSkillsString = currentSkills.join(",");
+
   // State management
   const [fullName, setFullName] = useState("");
   const [avatar, setAvatar] = useState(null);
@@ -67,7 +70,9 @@ function UpdateUserDataForm() {
 
     // Update user skills
     const skillsToUpdate = selectedSkills.map((skill) => skill.value).join(",");
-    await updateUserSkills({ uid: user.id, skills: skillsToUpdate });
+    console.log(skillsToUpdate);
+    if (skillsToUpdate !== currentSkillsString)
+      await updateUserSkills({ uid: user.id, skills: skillsToUpdate });
 
     // Refetch user data to get updated avatar URL
     refetchUser();

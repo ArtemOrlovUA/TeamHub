@@ -359,3 +359,47 @@ export async function declineRequestById(requestid) {
     throw new Error("Could not delete request after declining");
   }
 }
+
+export async function kickUserFromTeam({ role, emailToKick, team_id }) {
+  const roleColumnMap = {
+    "Front-end": "email_front",
+    "Back-end": "email_back",
+    "UI/UX": "email_ui",
+    QA: "email_qa",
+    PM: "email_pm",
+    Mentor: "email_mentor",
+  };
+
+  const column = roleColumnMap[role];
+
+  if (!column) {
+    throw new Error(`Unknown role: ${role}`);
+  }
+
+  const { data: team, error: fetchError } = await supabase
+    .from("teams")
+    .select(column)
+    .eq("id", team_id)
+    .single();
+
+  if (fetchError) {
+    console.error("Error fetching team:", fetchError.message);
+    throw new Error("Could not fetch team");
+  }
+
+  if (team[column] !== emailToKick) {
+    throw new Error("User email does not match the one in the team role");
+  }
+
+  const { error: updateError } = await supabase
+    .from("teams")
+    .update({ [column]: null })
+    .eq("id", team_id);
+
+  if (updateError) {
+    console.error("Error updating team:", updateError.message);
+    throw new Error("Could not remove user from team");
+  }
+
+  return updateError;
+}

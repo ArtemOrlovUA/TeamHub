@@ -28,7 +28,6 @@ export async function signup({ fullName, email, password, linkedin }) {
   return { data, dataUserInfo };
 }
 
-
 export async function login({ email, password }) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -42,7 +41,6 @@ export async function login({ email, password }) {
 
   return data;
 }
-
 
 export async function getCurrentUser() {
   const { data: session } = await supabase.auth.getSession();
@@ -58,20 +56,24 @@ export async function getCurrentUser() {
   return data?.user;
 }
 
-
 export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) throw new Error(error.message);
 }
 
-
-export async function updateCurrentUser({ email, fullName, avatar, linkedin, cv }) {
+export async function updateCurrentUser({
+  email,
+  fullName,
+  avatar,
+  linkedin,
+  cv,
+}) {
   if (!email) {
     throw new Error("Email is required for updating user information");
   }
 
-  const updateData = {};  
+  const updateData = {};
   if (fullName) updateData.fullName = fullName;
   if (linkedin) updateData.linkedIn = linkedin;
 
@@ -82,13 +84,22 @@ export async function updateCurrentUser({ email, fullName, avatar, linkedin, cv 
       .from("avatars")
       .upload(avatarFileName, avatar);
 
-    if (avatarError) throw new Error(`Avatar upload error: ${avatarError.message}`);
-    
+    if (avatarError)
+      throw new Error(`Avatar upload error: ${avatarError.message}`);
+
     // Set public URL for the avatar in metadata
     updateData.avatar = `${supabaseUrl}/storage/v1/object/public/avatars/${avatarFileName}`;
+
+    const { data: userInfoData, error: userInfoError } = await supabase
+      .from("userInfo")
+      .update(
+        "avatar",
+        `${supabaseUrl}/storage/v1/object/public/avatars/${avatarFileName}`,
+      )
+      .eq("email", email);
   }
 
-  // CV 
+  // CV
   if (cv) {
     const cvFileName = `cv-${email}-${Date.now()}`;
     const { data: cvUpload, error: cvError } = await supabase.storage
@@ -96,17 +107,18 @@ export async function updateCurrentUser({ email, fullName, avatar, linkedin, cv 
       .upload(cvFileName, cv);
     if (cvError) throw new Error(`CV upload failed: ${cvError.message}`);
 
-    updateData.cv = cvFileName; 
+    updateData.cv = cvFileName;
   }
 
-  // auth user metadata 
+  // auth user metadata
   const { user, error: authError } = await supabase.auth.getUser();
   if (authError) throw new Error(authError.message);
 
   // user's metadata
-  const { data: authData, error: authUpdateError } = await supabase.auth.updateUser({
-    data: updateData,
-  });
+  const { data: authData, error: authUpdateError } =
+    await supabase.auth.updateUser({
+      data: updateData,
+    });
 
   if (authUpdateError) throw new Error(authUpdateError.message);
 
@@ -123,4 +135,3 @@ export async function updateCurrentUser({ email, fullName, avatar, linkedin, cv 
 
   return userInfoData;
 }
-

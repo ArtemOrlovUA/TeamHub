@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useForm } from "react-hook-form";
+import { ModalContext } from "../../ui/Modal";
 import { useRequest } from "./useRequest";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useGetTeamById } from "./useGetTeamById";
 
 const rolesList = ["Front-end", "Back-end", "UI/UX", "QA", "PM", "Mentor"];
@@ -19,6 +20,7 @@ function RoleRequestSelect({ user_email, team_id, team_name }) {
   const { request } = useRequest();
   const { handleSubmit } = useForm();
   const { team } = useGetTeamById(team_id);
+  const { closeModal } = useContext(ModalContext);
 
   const [selectedRole, setSelectedRole] = useState("");
 
@@ -38,6 +40,7 @@ function RoleRequestSelect({ user_email, team_id, team_name }) {
     }
 
     request({ user_email, team_id, role: selectedRole });
+    closeModal();
   };
 
   if (availableRoles.length === 0) {

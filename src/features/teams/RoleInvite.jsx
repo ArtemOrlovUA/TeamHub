@@ -1,9 +1,13 @@
 /* eslint-disable react/prop-types */
+import { useContext } from "react";
+import { ModalContext } from "../../ui/Modal";
 import { useForm } from "react-hook-form";
 import { useInvite } from "./useInvite";
 
 function RoleInvite({ role, team_id }) {
   const { invite } = useInvite();
+
+  const { closeModal } = useContext(ModalContext);
 
   const {
     register,
@@ -20,6 +24,7 @@ function RoleInvite({ role, team_id }) {
       status: "pending",
     });
     reset();
+    closeModal();
   };
 
   return (

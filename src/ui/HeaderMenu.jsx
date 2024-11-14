@@ -3,6 +3,8 @@ import Logout from "../features/authentication/Logout";
 import ButtonIcon from "./ButtonIcon";
 import { HiOutlineUser } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../features/authentication/useUser";
+import { useGetUserByEmail } from "../features/teams/useGetUserByEmail";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
@@ -11,11 +13,16 @@ const StyledHeaderMenu = styled.ul`
 
 function HeaderMenu() {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const { user: userInfo } = useGetUserByEmail(user?.email);
+  console.log(userInfo);
 
   return (
     <StyledHeaderMenu>
       <li>
-        <ButtonIcon onClick={() => navigate("/account")}>
+        <ButtonIcon
+          onClick={() => navigate(`/profile/${userInfo && userInfo[0]?.id}`)}
+        >
           <HiOutlineUser />
         </ButtonIcon>
       </li>

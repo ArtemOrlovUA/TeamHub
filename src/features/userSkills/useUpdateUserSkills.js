@@ -13,7 +13,6 @@ export function useUpdateUserSkills() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: "user" });
         navigate("/dashboard", { replace: true });
-        toast.success("Дані користувача успішно оновлено");
       },
       onError: (error) => {
         console.error(error);
@@ -24,4 +23,3 @@ export function useUpdateUserSkills() {
 
   return { updateUserSkills, isUpdatingSkills };
 }
-
