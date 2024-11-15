@@ -75,7 +75,7 @@ const EditTeamForm = ({ team_id, team_name, team_goal, deadline }) => {
         />
         {errors?.timeline?.message && <p>{errors.timeline.message}</p>}
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit">Підтвердити редагування даних</button>
     </form>
   );
 };
