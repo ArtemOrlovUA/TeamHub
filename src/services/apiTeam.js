@@ -42,6 +42,20 @@ export async function createTeam(
   return insertedData;
 }
 
+export async function updateTeamById({ team_id, name, goals, deadline }) {
+  const { data, error } = await supabase
+    .from("teams")
+    .update({ teamName: name, teamGoals: goals, deadline_date: deadline })
+    .eq("id", team_id);
+
+  if (error) {
+    console.error("Error updating team:", error.message);
+    throw new Error("Could not update team");
+  }
+
+  return data;
+}
+
 export async function getTeam(id) {
   const { data, error } = await supabase
     .from("teams")

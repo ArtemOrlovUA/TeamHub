@@ -12,6 +12,7 @@ import RoleRequestSelect from "../features/teams/RoleRequestSelect";
 import { useGetRequestsByTeamId } from "../features/teams/useGetRequestsByTeamId";
 import TeamRequest from "../ui/TeamRequest";
 import RoleKick from "../features/teams/RoleKick";
+import EditTeamForm from "../features/teams/EditTeamForm";
 
 function TeamPage() {
   const { team, isLoading } = useTeam();
@@ -69,11 +70,15 @@ function TeamPage() {
         <span>
           <p>
             <span>Власник: </span>
-            <Link to={`/profile/${teamOwner[0]?.id}`}>
-              {teamOwner[0]?.fullName}
-            </Link>
+
+            {teamOwner && (
+              <Link to={`/profile/${teamOwner[0]?.id}`}>
+                {teamOwner[0]?.fullName}
+              </Link>
+            )}
           </p>
         </span>
+
         <span>
           <p>
             <span>Front-end: </span>
@@ -108,6 +113,7 @@ function TeamPage() {
             </Modal.Open>
           ) : null}
         </span>
+
         <span>
           <p>
             <span>Back-end: </span>
@@ -141,6 +147,7 @@ function TeamPage() {
             </Modal.Open>
           ) : null}
         </span>
+
         <span>
           <p>
             <span>UI/UX: </span>
@@ -173,6 +180,7 @@ function TeamPage() {
             </Modal.Open>
           ) : null}
         </span>
+
         <span>
           <p>
             <span>QA: </span>
@@ -205,6 +213,7 @@ function TeamPage() {
             </Modal.Open>
           ) : null}
         </span>
+
         <span>
           <p>
             <span>PM: </span>
@@ -237,6 +246,7 @@ function TeamPage() {
             </Modal.Open>
           ) : null}
         </span>
+
         <span>
           <p>
             <span>Ментор: </span>
@@ -278,6 +288,12 @@ function TeamPage() {
         <p>Таймлайн: {team?.deadline_date}</p>
 
         {teamOwner && teamOwner[0]?.email === user.email ? (
+          <Modal.Open opens={"editTeam"}>
+            <button>Оновити дані про команду</button>
+          </Modal.Open>
+        ) : null}
+
+        {teamOwner && teamOwner[0]?.email === user.email ? (
           <Modal.Open opens={"deleteTeam"}>
             <button>Видалити команду</button>
           </Modal.Open>
@@ -315,6 +331,14 @@ function TeamPage() {
       </Modal.Window>
       <Modal.Window name={"invite"}>
         <RoleInvite role={roleToInvite} team_id={teamId} />
+      </Modal.Window>
+      <Modal.Window name={"editTeam"}>
+        <EditTeamForm
+          team_id={teamId}
+          team_name={team?.teamName}
+          team_goal={team?.teamGoals}
+          deadline={team?.deadline_date}
+        />
       </Modal.Window>
       <Modal.Window name={"kick"}>
         <RoleKick

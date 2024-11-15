@@ -18,6 +18,7 @@ function Header() {
       <UserAvatar />
       <Link to="/dashboard">Головна сторінка</Link>
       <Link to="/teams">Команди</Link>
+      <Link to="/invites">Запрошення</Link>
       <HeaderMenu />
     </StyledHeader>
   );

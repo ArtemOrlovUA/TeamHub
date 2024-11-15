@@ -48,11 +48,11 @@ function ProjectForm() {
     );
   };
 
-  // Helper function to format the date as "DD.MM.YYYY"
+  // format the date as "DD.MM.YYYY"
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   };
@@ -65,15 +65,14 @@ function ProjectForm() {
     } else {
       const { name, goals, timeline } = data;
 
-      // Format the timeline date before submission
       const formattedTimeline = formatDate(timeline);
 
       createTeam({
         creatorEmail: user.email,
         roles: selectedRoles,
-        teamName: name,
-        teamGoals: goals,
-        deadline_date: formattedTimeline, // use the formatted date
+        teamName: name.trim(),
+        teamGoals: goals.trim(),
+        deadline_date: formattedTimeline,
       });
 
       reset();
@@ -112,7 +111,7 @@ function ProjectForm() {
               minDate.setDate(minDate.getDate() + 3);
               return (
                 selectedDate >= minDate ||
-                "Timeline should be at least 3 days from today"
+                "Часовйй проміжок має бути хоча б три дні"
               );
             },
           })}

@@ -15,7 +15,6 @@ function HeaderMenu() {
   const navigate = useNavigate();
   const { user } = useUser();
   const { user: userInfo } = useGetUserByEmail(user?.email);
-  console.log(userInfo);
 
   return (
     <StyledHeaderMenu>
