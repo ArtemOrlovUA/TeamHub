@@ -217,7 +217,7 @@ function TeamPage() {
         <span>
           <p>
             <span>PM: </span>
-            {(ui && (
+            {(pm && (
               <Link to={`/profile/${pm[0]?.id}`}>{pm[0]?.fullName}</Link>
             )) ||
               " відсутній"}
@@ -250,7 +250,7 @@ function TeamPage() {
         <span>
           <p>
             <span>Ментор: </span>
-            {(ui && (
+            {(mentor && (
               <Link to={`/profile/${mentor[0]?.id}`}>
                 {mentor[0]?.fullName}
               </Link>
