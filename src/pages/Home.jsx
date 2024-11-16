@@ -231,34 +231,6 @@ function Home() {
               Як це працює
             </button>
           </nav>
-
-          {/* Social Media Links */}
-          <div className="flex gap-4">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition hover:text-gray-100"
-            >
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition hover:text-gray-100"
-            >
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition hover:text-gray-100"
-            >
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-          </div>
         </div>
         <p className="mt-4 font-primaryRegular text-sm">
           &copy; 2024 TeamHub. Всі права захищені.

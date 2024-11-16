@@ -3,22 +3,38 @@ import { useUser } from "./useUser";
 
 const StyledUserAvatar = styled.div`
   display: flex;
-  gap: 1.2rem;
   align-items: center;
-  font-weight: 500;
-  font-size: 1.4rem;
-  color: var(--color-grey-600);
+  gap: 1rem;
+
+  span {
+    font-family: "Montserrat-Regular", sans-serif;
+    font-size: 1.4rem;
+    color: white;
+  }
+
+  a {
+    font-family: "Montserrat-Regular", sans-serif;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    border: 1px solid white;
+    border-radius: 0.4rem;
+    padding: 0.2rem 0.6rem;
+    transition: color 0.3s, background-color 0.3s;
+
+    &:hover {
+      color: black;
+      background-color: white; /* Invert colors on hover */
+    }
+  }
 `;
 
 const Avatar = styled.img`
-  display: block;
-  width: 4rem;
   width: 3.6rem;
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: center;
+  height: 3.6rem;
   border-radius: 50%;
-  outline: 2px solid var(--color-grey-100);
+  object-fit: cover;
+  border: 2px solid white; /* Matches header styling */
 `;
 
 function UserAvatar() {
@@ -32,7 +48,6 @@ function UserAvatar() {
       <Avatar src={avatar} alt={`Avatar of ${fullName}`} />
       <span>{fullName}</span>
       {linkedin && (
-        
         <a href={linkedin} target="_blank" rel="noopener noreferrer">
           LinkedIn
         </a>

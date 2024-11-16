@@ -8,7 +8,22 @@ import { useGetUserByEmail } from "../features/teams/useGetUserByEmail";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
-  gap: 0.4rem;
+  gap: 1rem;
+  align-items: center;
+
+  li {
+    list-style: none;
+  }
+`;
+
+const StyledButtonIcon = styled(ButtonIcon)`
+  font-size: 1.5rem;
+  color: white;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--color-grey-300); /* Light grey on hover */
+  }
 `;
 
 function HeaderMenu() {
@@ -19,13 +34,13 @@ function HeaderMenu() {
   return (
     <StyledHeaderMenu>
       <li>
-        <ButtonIcon
+        <StyledButtonIcon
           onClick={() => navigate(`/profile/${userInfo && userInfo[0]?.id}`)}
+          aria-label="Profile"
         >
           <HiOutlineUser />
-        </ButtonIcon>
+        </StyledButtonIcon>
       </li>
-
       <li>
         <Logout />
       </li>

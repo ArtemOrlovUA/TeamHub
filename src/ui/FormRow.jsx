@@ -6,7 +6,7 @@ const StyledFormRow = styled.div`
   display: flex;
   flex-direction: column;
   grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
+  gap: 0.5rem;
 
   padding: 1.2rem 0;
 
@@ -31,11 +31,13 @@ const StyledFormRow = styled.div`
 
 const Label = styled.label`
   font-weight: 500;
+  font-family: 'Montserrat-Regular', sans-serif; /* Apply Montserrat-Regular */
 `;
 
 const Error = styled.span`
   font-size: 1.4rem;
   color: var(--color-red-700);
+  font-family: 'Montserrat-Bold', sans-serif; /* Apply Montserrat-Bold */
 `;
 
 function FormRow({ label, children, error }) {

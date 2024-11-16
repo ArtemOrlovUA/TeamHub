@@ -1,3 +1,4 @@
+// src/components/Button.js
 import styled, { css } from 'styled-components';
 
 const sizes = {
@@ -6,11 +7,10 @@ const sizes = {
     padding: 0.4rem 0.8rem;
     text-transform: uppercase;
     font-weight: 600;
-    text-align: center;
   `,
   medium: css`
     font-size: 1.4rem;
-    padding: 1.2rem 1.6rem;
+    padding: 1rem 2rem;
     font-weight: 500;
   `,
   large: css`
@@ -22,16 +22,18 @@ const sizes = {
 
 const variations = {
   primary: css`
-    color: var(--color-brand-50);
-    background-color: var(--color-brand-600);
+    color: white;
+    background-color: #140D2D;
+    border: 1px solid white;
 
     &:hover {
-      background-color: var(--color-brand-700);
+      background-color: white;
+      color: #140D2D;
     }
   `,
   secondary: css`
     color: var(--color-grey-600);
-    background: var(--color-grey-0);
+    background-color: var(--color-grey-100);
     border: 1px solid var(--color-grey-200);
 
     &:hover {
@@ -49,20 +51,19 @@ const variations = {
 };
 
 const Button = styled.button`
-  border: none;
-  border-radius: var(--border-radius-sm);
+  display: inline-block;
+  border: 1px solid transparent;
+  border-radius: 9999px; /* Full rounded corners */
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+  font-family: 'Montserrat-Bold', 'Montserrat-Regular', sans-serif; /* Montserrat font applied */
   box-shadow: var(--shadow-sm);
-  width: 100%;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 
-  ${(props) => {
-    return variations[props.variation];
-  }}
-
-  ${(props) => {
-    return sizes[props.size];
-  }}
+  ${(props) => variations[props.variation]}
+  ${(props) => sizes[props.size]}
 `;
+
 
 Button.defaultProps = {
   variation: 'primary',
