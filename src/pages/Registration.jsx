@@ -18,7 +18,6 @@ function Registration() {
           Реєстрація
         </h2>
 
-        {/* Render Signup Form */}
         <SignupForm />
 
         {/* Login Link */}

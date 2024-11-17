@@ -8,12 +8,16 @@ function TeamListItem({ team_id, team_name, email_owner }) {
 
   return (
     <tr key={team_id}>
-      <td>{team_name}</td>
-      <td>
+      <td className="px-6 py-4 whitespace-nowrap text-m font-medium text-gray-900"
+      >{team_name}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-m text-gray-800">
         <Link to={`/profile/${user && user[0]?.id}`}>{owner_full_name}</Link>
       </td>
-      <td>
-        <Link to={`/team/${team_id}`}>Переглянути деталі</Link>
+      <td className="px-6 py-4 whitespace-nowrap text-right text-m font-medium">
+        <Link to={`/team/${team_id}`}
+        className="text-indigo-950 hover:text-indigo-400"
+        >Переглянути деталі</Link>
       </td>
     </tr>
   );

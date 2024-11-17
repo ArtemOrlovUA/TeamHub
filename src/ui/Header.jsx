@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(20, 13, 45, 0.8); /* Dark semi-transparent background */
+  background: #140D2D;
   padding: 1rem 4rem;
   display: flex;
   justify-content: space-between;

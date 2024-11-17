@@ -1,33 +1,26 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 const Form = styled.form`
-  margin-top: 1rem;
+  margin: 2rem 0;
+  padding: 2.4rem;
+  background-color: #ffffff;
+  border: 1px solid var(--color-grey-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  font-size: 1.2rem;
 
   ${(props) =>
-    props.type !== 'modal' &&
+    props.type === "modal" &&
     css`
-      padding: 2.4rem 4rem;
-
-      /* Box */
-      background-color: var(--color-grey-0);
-      border: 1px solid var(--color-grey-100);
-      border-radius: var(--border-radius-md);
+      width: 100%;
+      max-width: 60rem;
     `}
 
   ${(props) =>
-    props.type === 'modal' &&
-    css`
-      width: 80rem;
-    `}
-
-  ${(props) =>
-    props.type === 'users' &&
+    props.type === "users" &&
     css`
       max-height: none;
     `}
-    
-  overflow: hidden;
-  font-size: 1.4rem;
 `;
 
 export default Form;

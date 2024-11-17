@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { useAcceptInvite } from "../features/teams/useAcceptInvite";
 import { useDeclineInvite } from "../features/teams/useDeclineInvite";
@@ -10,16 +9,33 @@ function TeamInvite({ invite }) {
   const { declineInvite } = useDeclineInvite();
 
   return (
-    <div key={invite.id} className="mb-2 bg-yellow-300">
-      <div>
+    <>
+      {/* Назва команди */}
+      <td className="px-6 py-4 text-indigo-600 hover:underline">
         <Link to={`/team/${invite.team_id}`}>
-          Від команди: {team?.teamName}
+          {team?.teamName || "Завантаження..."}
         </Link>
-      </div>
-      <div>Роль: {invite.role}</div>
-      <button onClick={() => acceptInvite(invite.id)}>Прийняти</button>
-      <button onClick={() => declineInvite(invite.id)}>Відхилити</button>
-    </div>
+      </td>
+      {/* Роль */}
+      <td className="px-6 py-4 text-gray-800">{invite.role}</td>
+      {/* Дії */}
+      <td className="px-6 py-4 text-right">
+        <div className="flex justify-end gap-4">
+          <button
+            onClick={() => acceptInvite(invite.id)}
+            className="rounded-full border border-green-500 bg-green-500 px-4 py-2 font-primaryBold text-white transition hover:bg-green-600"
+          >
+            Прийняти
+          </button>
+          <button
+            onClick={() => declineInvite(invite.id)}
+            className="rounded-full border border-red-500 bg-red-500 px-4 py-2 font-primaryBold text-white transition hover:bg-red-600"
+          >
+            Відхилити
+          </button>
+        </div>
+      </td>
+    </>
   );
 }
 

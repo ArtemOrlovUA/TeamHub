@@ -120,7 +120,7 @@ function UpdateUserDataForm() {
           onChange={(e) => setCv(e.target.files[0])}
         />
       </FormRow>
-      <FormRow label="Мої навички:">
+      <FormRow label="Змінити навички:">
         <Select
           isMulti
           options={skillsList}

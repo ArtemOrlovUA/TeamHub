@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 function Home() {
-  // Scroll handler for smooth scrolling to sections
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {

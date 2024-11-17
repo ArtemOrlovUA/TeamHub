@@ -1,6 +1,6 @@
 // import { Link } from "react-router-dom";
 // import { useUser } from "../features/authentication/useUser";
-// import { useUserCV } from "../features/authentication/useUserCV";  
+// import { useUserCV } from "../features/authentication/useUserCV";
 // import { useGetSkills } from "../features/userSkills/useGetSkills";
 // import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
 // import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
@@ -80,10 +80,9 @@
 
 import { Link } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import { useUserCV } from "../features/authentication/useUserCV";  
+import { useUserCV } from "../features/authentication/useUserCV";
 import { useGetSkills } from "../features/userSkills/useGetSkills";
 import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
-import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
 import { useGetAllUserTeams } from "../features/teams/useGetAllUserTeams";
 import { useEffect } from "react";
 import { useDeletedTeam } from "../context/RateDeletedTeamContext";
@@ -96,7 +95,6 @@ function Dashboard() {
   const { skills } = useGetSkills();
   const { teams } = useGetTeamsByCreator(user.email);
   const { userTeams } = useGetAllUserTeams(user.email);
-  const { personInvites } = useGetInvitesByEmail(user.email);
   const { clearTeam } = useDeletedTeam();
 
   useEffect(() => {
@@ -104,111 +102,130 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#140D2D] text-white">
-      {/* Header Section */}
-      <header className="flex justify-between items-center bg-[#140D2D] bg-opacity-90 px-6 py-4">
-        <h1 className="mt-24 text-3xl font-bold">Dashboard</h1>
-      </header>
-
+    <div className="min-h-screen bg-indigo-50 text-gray-900">
       {/* Main Content */}
-      <main className="container mx-auto mt-10 px-6 space-y-12">
-        {/* Resume Section */}
-        {cvUrl && (
-          <div className="bg-black bg-opacity-30 rounded-lg p-6 shadow-lg hover:bg-opacity-40 transition">
+      <main className="container mx-auto mt-24 grid grid-cols-1 gap-8 px-6 py-12 md:grid-cols-3">
+        {/* User Info and Actions */}
+        <section className="col-span-1 space-y-6 rounded-lg bg-white p-6 shadow">
+          <h2 className="font-primaryBold text-2xl text-indigo-950">
+            Ваші дані
+          </h2>
+          <p className="text-lg">
+            <strong>Email:</strong> {user.email}
+          </p>
+          {skills && (
+            <p className="text-lg">
+              <strong>Навички:</strong> {skills.join(", ")}
+            </p>
+          )}
+          <p className="text-lg">
+            <strong>Рейтинг:</strong> {userRating?.[0]?.rating || "Немає даних"}
+          </p>
+          {cvUrl && (
             <a
               href={cvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-lg font-semibold hover:underline"
+              className="mt-2 inline-block rounded-full border border-indigo-950 bg-indigo-950 px-8 py-3 font-primaryBold text-white shadow transition hover:bg-indigo-50 hover:text-indigo-950"
             >
               Подивитися резюме
             </a>
-          </div>
-        )}
-
-        {/* User Info */}
-        <div className="bg-black bg-opacity-30 rounded-lg p-6 shadow-lg">
-          <h2 className="text-2xl font-bold">Ваші дані:</h2>
-          <p className="mt-2">Email: <span className="font-semibold">{user.email}</span></p>
-          {skills && (
-            <p className="mt-2">Навички: <span className="font-semibold">{skills?.join(", ")}</span></p>
           )}
-          <p className="mt-2">Рейтинг: <span className="font-semibold">{userRating?.[0]?.rating || "Немає даних"}</span></p>
-        </div>
-
-        {/* Invitations */}
-        {personInvites?.length > 0 && (
-          <div className="bg-black bg-opacity-30 rounded-lg p-6 shadow-lg">
-            <h2 className="text-2xl font-bold">Запрошення</h2>
+          <div className="flex flex-col gap-4">
             <Link
-              to="/invites"
-              className="mt-4 inline-block rounded-lg bg-indigo-500 px-4 py-2 text-white transition hover:bg-indigo-600"
+              to="/createTeam"
+              className="mt-2 inline-block rounded-full border border-indigo-950 px-4 py-3 text-center font-primaryBold text-indigo-950 shadow-lg hover:bg-green-900 hover:text-white"
             >
-              Подивитися запрошення
+              Створити команду
+            </Link>
+            <Link
+              to="/teams"
+              className="mt-2 inline-block rounded-full border border-indigo-950 px-4 py-3 text-center font-primaryBold text-indigo-950 shadow-lg hover:bg-blue-900 hover:text-white"
+            >
+              Приєднатися до команди
             </Link>
           </div>
-        )}
+        </section>
 
-        {/* Create or Join Teams */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <Link
-            to="/createTeam"
-            className="w-full md:w-1/2 rounded-lg bg-green-500 px-4 py-6 text-center font-bold text-white shadow-lg transition hover:bg-green-600"
-          >
-            Створити команду
-          </Link>
-          <Link
-            to="/teams"
-            className="w-full md:w-1/2 rounded-lg bg-blue-500 px-4 py-6 text-center font-bold text-white shadow-lg transition hover:bg-blue-600"
-          >
-            Приєднатися до команди
-          </Link>
-        </div>
-
-        {/* Teams Overview */}
-        <div className="space-y-8">
-          {userTeams?.filter(
-            (userTeam) => !teams?.some((team) => team.id === userTeam.id)
-          )?.length > 0 && (
-            <div className="bg-black bg-opacity-30 rounded-lg p-6 shadow-lg">
-              <h2 className="text-2xl font-bold">Ваші команди:</h2>
-              <div className="mt-4 space-y-2">
-                {userTeams
-                  ?.filter((userTeam) => !teams?.some((team) => team.id === userTeam.id))
-                  .map((team) => (
-                    <Link
-                      key={team.id}
-                      to={`/team/${team.id}`}
-                      className="block text-lg font-semibold hover:underline"
-                    >
+        {/* All Teams */}
+        <section className="col-span-2 space-y-6 rounded-lg bg-white p-6 shadow">
+          <h2 className="font-primaryBold text-2xl text-indigo-950">
+            Всі команди
+          </h2>
+          <div className="max-h-96 overflow-y-auto">
+            <table className="min-w-full divide-y divide-gray-200 bg-indigo-50 shadow">
+              <thead>
+                <tr>
+                  <th className="px-6 py-3 text-left font-primaryBold text-indigo-950">
+                    Назва команди
+                  </th>
+                  <th className="px-6 py-3 text-right font-primaryBold text-indigo-950">
+                    Дії
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 font-primaryRegular">
+                {userTeams?.map((team) => (
+                  <tr key={team.id}>
+                    <td className="px-6 py-4 text-indigo-950">
                       {team.teamName}
-                    </Link>
-                  ))}
-              </div>
-            </div>
-          )}
-
-          {teams?.length > 0 && (
-            <div className="bg-black bg-opacity-30 rounded-lg p-6 shadow-lg">
-              <h2 className="text-2xl font-bold">Ваші команди:</h2>
-              <div className="mt-4 space-y-2">
-                {teams.map((team) => (
-                  <Link
-                    key={team.id}
-                    to={`/team/${team.id}`}
-                    className="block text-lg font-semibold hover:underline"
-                  >
-                    {team.teamName}
-                  </Link>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link
+                        to={`/team/${team.id}`}
+                        className="mt-2 inline-block rounded-full border bg-indigo-800 px-4 py-2 text-white hover:bg-indigo-900"
+                      >
+                        Детальніше
+                      </Link>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </div>
-          )}
-        </div>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* Teams Created by User */}
+        <section className="col-span-3 space-y-6 rounded-lg bg-white p-6 shadow">
+          <h2 className="font-primaryBold text-2xl text-indigo-950">
+            Команди, створені вами
+          </h2>
+          <div className="max-h-96 overflow-y-auto">
+            <table className="min-w-full divide-y divide-gray-200 bg-indigo-50 shadow">
+              <thead>
+                <tr>
+                  <th className="px-6 py-3 text-left font-primaryBold text-indigo-950">
+                    Назва команди
+                  </th>
+                  <th className="px-6 py-3 text-right font-primaryBold text-indigo-950">
+                    Дії
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 font-primaryRegular">
+                {teams?.map((team) => (
+                  <tr key={team.id}>
+                    <td className="px-6 py-4 text-indigo-950">
+                      {team.teamName}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link
+                        to={`/team/${team.id}`}
+                        className="mt-2 inline-block rounded-full border bg-indigo-800 px-4 py-2 text-white hover:bg-indigo-900"
+                      >
+                        Детальніше
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto bg-[#140D2D] py-4 text-center text-gray-400">
+      <footer className="py-4 text-center font-primaryRegular text-indigo-950">
         &copy; 2024 TeamHub. Всі права захищені.
       </footer>
     </div>

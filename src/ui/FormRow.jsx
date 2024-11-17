@@ -30,12 +30,12 @@ const StyledFormRow = styled.div`
 `;
 
 const Label = styled.label`
-  font-weight: 500;
+  font-weight: 400;
   font-family: 'Montserrat-Regular', sans-serif; /* Apply Montserrat-Regular */
 `;
 
 const Error = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: var(--color-red-700);
   font-family: 'Montserrat-Bold', sans-serif; /* Apply Montserrat-Bold */
 `;

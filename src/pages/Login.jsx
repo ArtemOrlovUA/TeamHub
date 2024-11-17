@@ -18,7 +18,6 @@ function Login() {
           Увійти
         </h2>
 
-        {/* Render Login Form */}
         <LoginForm />
 
         {/* Registration Link */}
