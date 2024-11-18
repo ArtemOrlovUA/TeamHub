@@ -77,12 +77,14 @@
 // }
 
 // export default Dashboard;
+// File: Dashboard.jsx
 
 import { Link } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 import { useUserCV } from "../features/authentication/useUserCV";
 import { useGetSkills } from "../features/userSkills/useGetSkills";
 import { useGetTeamsByCreator } from "../features/teams/useGetTeamsByCreator";
+import { useGetInvitesByEmail } from "../features/teams/useGetInvitesByEmail";
 import { useGetAllUserTeams } from "../features/teams/useGetAllUserTeams";
 import { useEffect } from "react";
 import { useDeletedTeam } from "../context/RateDeletedTeamContext";
@@ -95,6 +97,7 @@ function Dashboard() {
   const { skills } = useGetSkills();
   const { teams } = useGetTeamsByCreator(user.email);
   const { userTeams } = useGetAllUserTeams(user.email);
+  const { personInvites } = useGetInvitesByEmail(user.email);
   const { clearTeam } = useDeletedTeam();
 
   useEffect(() => {
@@ -121,16 +124,39 @@ function Dashboard() {
           <p className="text-lg font-primaryRegular">
             <strong>Рейтинг:</strong> {userRating?.[0]?.rating || "Немає даних"}
           </p>
+          
+          {/* Invitations Section */}
+          {personInvites?.length > 0 && (
+            <div className="mt-6">
+              <ul className="mt-4 space-y-4 font-primaryRegular">
+                {personInvites.map((invite) => (
+                  <li
+                    key={invite.id}
+                  >
+                    <span className="text-indigo-950">{invite.teamName}</span>
+                    <Link
+                      to={`/invites`}
+                      className="mt-2 inline-block rounded-full border border-indigo-950 bg-indigo-950 px-4 py-3 text-center font-primaryBold text-white shadow transition hover:bg-indigo-50 hover:text-indigo-950"
+                    >
+                      Переглянути запрошення
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {cvUrl && (
             <a
               href={cvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-block rounded-full border border-indigo-950 bg-indigo-950 px-8 py-3 font-primaryBold text-white shadow transition hover:bg-indigo-50 hover:text-indigo-950"
+              className="mt-2 inline-block rounded-full border border-indigo-950 bg-indigo-950 px-4 py-3 text-center font-primaryBold text-white shadow transition hover:bg-indigo-50 hover:text-indigo-950"
             >
-              Подивитися резюме
+              Переглянути моє резюме
             </a>
           )}
+          
           <div className="flex flex-col gap-4">
             <Link
               to="/createTeam"
