@@ -23,13 +23,13 @@ function TeamInvite({ invite }) {
         <div className="flex justify-end gap-4">
           <button
             onClick={() => acceptInvite(invite.id)}
-            className="rounded-full border border-green-500 bg-green-500 px-4 py-2 font-primaryBold text-white transition hover:bg-green-600"
+            className="rounded-full border border-green-700 bg-green-700 px-4 py-2 font-primaryBold text-white transition hover:bg-green-900"
           >
             Прийняти
           </button>
           <button
             onClick={() => declineInvite(invite.id)}
-            className="rounded-full border border-red-500 bg-red-500 px-4 py-2 font-primaryBold text-white transition hover:bg-red-600"
+            className="rounded-full border border-red-700 bg-red-700 px-4 py-2 font-primaryBold text-white transition hover:bg-red-900"
           >
             Відхилити
           </button>

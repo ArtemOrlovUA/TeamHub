@@ -110,15 +110,15 @@ function Dashboard() {
           <h2 className="font-primaryBold text-2xl text-indigo-950">
             Ваші дані
           </h2>
-          <p className="text-lg">
+          <p className="text-lg font-primaryRegular">
             <strong>Email:</strong> {user.email}
           </p>
           {skills && (
-            <p className="text-lg">
+            <p className="text-lg font-primaryRegular">
               <strong>Навички:</strong> {skills.join(", ")}
             </p>
           )}
-          <p className="text-lg">
+          <p className="text-lg font-primaryRegular">
             <strong>Рейтинг:</strong> {userRating?.[0]?.rating || "Немає даних"}
           </p>
           {cvUrl && (

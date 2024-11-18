@@ -10,7 +10,7 @@ const StyledModal = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: yellow;
+  background-color: var(--color-indigo-50); 
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
@@ -88,8 +88,8 @@ function Window({ children, name }) {
 
   if (openName === name)
     return createPortal(
-      <Overlay className="bg-yellow-200">
-        <StyledModal className="bg-yellow-200" ref={ref}>
+      <Overlay className="bg-indigo-50">
+        <StyledModal className="bg-indigo-50" ref={ref}>
           <Button onClick={() => closeModal(name)}>
             <HiXMark />
           </Button>
