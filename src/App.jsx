@@ -50,7 +50,8 @@ function App() {
               <Route path="account" element={<UpdateUserInfo />} />
               <Route path="profile/:id" element={<UserProfile />} />
             </Route>
-            <Route path="home" element={<Home />} />
+            <Route path="/" element={<Navigate replace to="/home" />} />
+            <Route path="/home" element={<Home />} />
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
           </Routes>
